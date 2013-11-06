@@ -1,0 +1,17 @@
+h1 {color: darkblue;}
+
+body {
+    background: #eeeeee;
+    font-family: "Trebuchet MS", Verdana, Arial;
+}
+
+.detail {
+    width:200px;
+    float:left;
+    margin-left:10px;
+}
+.map {
+    background-color:#FFFFFF;
+    float:left;
+    margin-left:20px;
+}

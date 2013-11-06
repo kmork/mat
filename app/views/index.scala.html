@@ -1,0 +1,43 @@
+@main("MAT") {
+    <div>
+        <div class="detail">
+            <h1>MAT</h1><br>
+            <i>The Mind-Amplifying Tool</i>
+            <br>
+            <br>
+            <br>
+            Drag the mouse over the concept map for more info
+        </div>
+
+        <div class="map">
+            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1000 1000">
+                <!--
+                <circle cx="320" cy="320" r="300" stroke="red" stroke-width="2" fill="white" />
+                <circle cx="320" cy="320" r="180" stroke="red" stroke-width="2" fill="white" />
+                -->
+
+                <line x1="130" y1="130" x2="320" y2="320"
+                style="stroke:rgb(0,0,255);stroke-width:2"/>
+
+                <line x1="400" y1="200" x2="320" y2="320"
+                style="stroke:rgb(0,0,255);stroke-width:2"/>
+
+                <g stroke="black" stroke-width="3" fill="black">
+                    <ellipse cx="130" cy="130" rx="50" ry="25" style="fill:white"/>
+                    <ellipse cx="320" cy="320" rx="50" ry="25" style="fill:white"/>
+                    <ellipse cx="400" cy="200" rx="50" ry="25" style="fill:white"/>
+                </g>
+
+                <g font-size="15" font="sans-serif" fill="black" stroke="none"
+                text-anchor="middle">
+                    <text x="130" y="130" dy="0">A</text>
+                    <text x="320" y="320" dy="0">C</text>
+                    <text x="400" y="200" dy="0">B</text>
+                </g>
+            </svg>
+            <p>
+                <object width="800" height="600" type="image/svg+xml"/>
+            </p>
+        </div>
+    </div>
+}
