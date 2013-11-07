@@ -1,4 +1,4 @@
-mat
+MatMaps
 ===
 
 MatMaps - the Mind Amplifying Tool
