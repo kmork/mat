@@ -11,14 +11,14 @@
             Drag the mouse over the concept map for more info,
             or click the NEW button to get started.
         </div>
-
-        <div class="map">
+        <div class="map" id="map">
+            <!--
             <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1000 1000">
                 <!--
                 <circle cx="320" cy="320" r="300" stroke="red" stroke-width="2" fill="white" />
                 <circle cx="320" cy="320" r="180" stroke="red" stroke-width="2" fill="white" />
                 -->
-
+             <!--
                 <line x1="130" y1="130" x2="320" y2="320"
                 style="stroke: rgb(27,3,161) ;stroke-width:3"/>
 
@@ -40,7 +40,25 @@
             </svg>
             <p>
                 <object width="800" height="600" type="image/svg+xml"/>
-            </p>
-        </div>
+            </p>  -->
+         </div>
     </div>
+
+    <script language="javascript" type="text/javascript">
+    var graph = Viva.Graph.graph();
+    graph.addNode('MAT', "MAT");
+    graph.addNode('about', 'about');
+    graph.addNode('examples', 'examples');
+    graph.addLink('MAT', 'about');
+    graph.addLink('MAT', 'examples');
+
+    var graphics = Viva.Graph.View.svgGraphics();
+    var renderer = Viva.Graph.View.renderer(graph,
+    {
+    graphics : graphics,
+    container: document.getElementById("map")
+    });
+    renderer.run();
+    </script>
+
 }
