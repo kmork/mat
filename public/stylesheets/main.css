@@ -1,4 +1,8 @@
 h1 {color: darkblue;}
+h2 {
+    color: darkblue;
+    font-style: italic;
+}
 
 body {
     background: #eeeeee;
@@ -6,20 +10,24 @@ body {
 }
 
 .detail {
-    width:200px;
+    width:15%;
     float:left;
     margin-left:10px;
+    height:100%
 }
 
 .map {
     background-color:#FFFFFF;
     float:left;
     margin-left:20px;
-    width:800px;
-    height:500px;
+    width:60%;
+    height:700px;
 }
 
 .description {
     margin-left:10px;
+    float: left;
+    width: 20%;
+    height:100%
 }
 

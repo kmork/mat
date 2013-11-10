@@ -1,15 +1,16 @@
 @main("MAT") {
     <div>
         <div class="detail">
-            <h1>Mat-Maps<br><i>Beta</i></h1>
+            <h1>Mat-Maps</h1>
+            <h2>Beta</h2>
             <i>The Mind-Amplifying Tool</i>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            Drag the mouse over the concept map for more info,
-            or click the NEW button to get started.
+            <br><br><hr><br><br>
+            Move the mouse over the concept map for more info,
+            or click the "New map" button to get started.
+            <br><br><hr><br><br>
+            <form action="new">
+                <input type="button" value="New map">
+            </form>
         </div>
         <div class="map" id="map">
             <!--
@@ -20,6 +21,19 @@
                 -->
          </div>
         <div id="nodeDescription" class="description">
+            <div id="about" hidden="true">
+                <h2>About Mat-Maps</h2>
+                Source: <a href="https://github.com/kmork/mat.git">https://github.com/kmork/mat.git</a>
+                <br><br>
+                Knut Mork, 2013
+            </div>
+            <div id="MAT" hidden="true">
+                <h2>MAT-Maps</h2>
+                Free to use concept map tool (concept maps, topic maps, mind maps) to help structuring your thoughts on a complex topic.
+            </div>
+            <div id="examples" hidden="true">
+                <h2>Various examples of concept maps</h2>
+            </div>
     </div>
 
     <script language="javascript" type="text/javascript">
@@ -32,18 +46,17 @@
 
         var graphics = Viva.Graph.View.svgGraphics();
 
-        var showNodeDescription = function(desc, isOn) {
-            if (isOn) {
-                document.getElementById("nodeDescription").innerHTML = desc;
-            } else {
-                document.getElementById("nodeDescription").innerHTML = '';
-            }
+        var showNodeDescription = function(node, isOn) {
+            document.getElementById(node.id ).hidden = !isOn;
+//            if (isOn) {
+//                document.getElementById(node.id).innerHTML = desc;
+//            } else {
+//                document.getElementById(node.id).innerHTML = '';
+//            }
         }
 
         graphics.node(function(node) {
-            // This time it's a group of elements: http://www.w3.org/TR/SVG/struct.html#Groups
             var ui = Viva.Graph.svg('g'),
-            // Create SVG text element with user id as content
             svgText = Viva.Graph.svg('text').attr('dx', node.id.length * -4 + 'px').attr('dy', '5px').text(node.id),
             img = Viva.Graph.svg('ellipse')
             .attr('rx', 50)
@@ -56,9 +69,9 @@
             ui.append(svgText);
 
             $(ui).hover(function() { // mouse over
-            showNodeDescription(node.data, true);
+            showNodeDescription(node, true);
             }, function() { // mouse out
-            showNodeDescription(node.data, false);
+            showNodeDescription(node, false);
             });
 
             return ui;
