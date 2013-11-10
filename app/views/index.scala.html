@@ -18,41 +18,27 @@
                 <circle cx="320" cy="320" r="300" stroke="red" stroke-width="2" fill="white" />
                 <circle cx="320" cy="320" r="180" stroke="red" stroke-width="2" fill="white" />
                 -->
-             <!--
-                <line x1="130" y1="130" x2="320" y2="320"
-                style="stroke: rgb(27,3,161) ;stroke-width:3"/>
-
-                <line x1="400" y1="200" x2="320" y2="320"
-                style="stroke:rgb(27,3,161);stroke-width:3"/>
-
-                <g stroke="black" stroke-width="3" fill="black">
-                    <ellipse cx="130" cy="130" rx="50" ry="25" style="fill:white"/>
-                    <ellipse cx="320" cy="320" rx="50" ry="25" style="fill:white"/>
-                    <ellipse cx="400" cy="200" rx="50" ry="25" style="fill:white"/>
-                </g>
-
-                <g font-size="15" font="sans-serif" fill="black" stroke="none"
-                text-anchor="middle">
-                    <text x="130" y="130" dy="0">Examples</text>
-                    <text x="320" y="320" dy="0">MAT</text>
-                    <text x="400" y="200" dy="0">About</text>
-                </g>
-            </svg>
-            <p>
-                <object width="800" height="600" type="image/svg+xml"/>
-            </p>  -->
          </div>
+        <div id="nodeDescription" class="description">
     </div>
 
     <script language="javascript" type="text/javascript">
         var graph = Viva.Graph.graph();
-        graph.addNode('MAT', "MAT");
-        graph.addNode('about', 'about');
-        graph.addNode('examples', 'examples');
+        graph.addNode('MAT', "MAT-Maps");
+        graph.addNode('about', 'About MAT-Maps');
+        graph.addNode('examples', 'Various examples of concept maps');
         graph.addLink('MAT', 'about');
         graph.addLink('MAT', 'examples');
 
         var graphics = Viva.Graph.View.svgGraphics();
+
+        var showNodeDescription = function(desc, isOn) {
+            if (isOn) {
+                document.getElementById("nodeDescription").innerHTML = desc;
+            } else {
+                document.getElementById("nodeDescription").innerHTML = '';
+            }
+        }
 
         graphics.node(function(node) {
             // This time it's a group of elements: http://www.w3.org/TR/SVG/struct.html#Groups
@@ -68,6 +54,13 @@
 
             ui.append(img);
             ui.append(svgText);
+
+            $(ui).hover(function() { // mouse over
+            showNodeDescription(node.data, true);
+            }, function() { // mouse out
+            showNodeDescription(node.data, false);
+            });
+
             return ui;
         }).placeNode(function(nodeUI, pos) {
             // 'g' element doesn't have convenient (x,y) attributes, instead
