@@ -2,14 +2,23 @@ $(document).ready(function(){
     var graph = Viva.Graph.graph();
     graph.addNode('MAT', "MAT-Maps");
     graph.addNode('about', 'About MAT-Maps');
-    graph.addNode('examples', 'Various examples of concept maps');
+    graph.addNode('examples', 'Various examples of concept maps. The examples are all drawn by hand, and will be crazy I promise');
     graph.addLink('MAT', 'about');
     graph.addLink('MAT', 'examples');
 
     var graphics = Viva.Graph.View.svgGraphics();
 
     var showNodeDescription = function(node, isOn) {
-        document.getElementById(node.id ).hidden = !isOn;
+        $('#' + node.id).tipsy({
+            gravity: 'w',
+            offset: 10,
+            html: true,
+            title: function() {
+                return node.data;
+            }
+        });
+        //$('#' + node.id).popover({trigger: 'focus', content: 'test'}).popover("show");
+        //document.getElementById(node.id ).hidden = !isOn;
 //            if (isOn) {
 //                document.getElementById(node.id).innerHTML = desc;
 //            } else {
@@ -18,7 +27,7 @@ $(document).ready(function(){
     }
 
     graphics.node(function(node) {
-        var ui = Viva.Graph.svg('g'),
+        var ui = Viva.Graph.svg('g').attr('id', node.id),
             svgText = Viva.Graph.svg('text').attr('dx', node.id.length * -4 + 'px').attr('dy', '5px').text(node.id),
             img = Viva.Graph.svg('ellipse')
                 .attr('rx', 50)
