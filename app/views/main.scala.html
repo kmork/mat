@@ -1,14 +1,22 @@
 @(title: String)(content: Html)
 
 <!DOCTYPE html>
-
-<html>
+<html lang="en">
     <head>
+        <meta charset="utf-8">
         <title>@title</title>
+        <meta name="description" content="The FREE Concept Map Tool">
+        <meta name="author" content="Knut Mork">
+
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.css")">
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
-        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.min.css")">
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/tipsy.css")"/>
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+
+        <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+        <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
 
         <script src="@routes.Assets.at("javascripts/lib/jquery-1.9.0.min.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/lib/jquery.tipsy.js")" type="text/javascript"></script>
@@ -16,7 +24,7 @@
         <script src="@routes.Assets.at("javascripts/lib/vivagraph.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/map.js")" type="text/javascript"></script>
     </head>
-    <body style="background: #eeeeee;">
+    <body>
         @content
     </body>
 </html>

@@ -1,45 +1,35 @@
-@main("MAT") {
-    <div>
-        <div class="detail" style="padding-right: 15px; padding-bottom: 10px;">
-            <h1 style="font-family: 'Lucida Sans Typewriter', 'Lucida Console', Monaco, 'Bitstream Vera Sans Mono', monospace;color: #515872">mat-maps</h1>
-            <h4 style="font-family: 'Lucida Sans Typewriter', 'Lucida Console', Monaco, 'Bitstream Vera Sans Mono', monospace;color: #b5b5b5"><i>beta</i></h4>
-            <br><br>
-            <i style="color: #515872">The FREE Concept Map Tool</i>
-            <br><hr><br>
-            <p class="muted">Move the mouse over the concept map for more info,
-            or click the "New map" button to get started.</p>
-            <hr><br>
-            <a class="btn btn-primary" href="/new"><i class="icon-pencil icon-white"></i> New map</a>
-        </div>
-        <div class="map" id="map">
-            <!--
-            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1000 1000">
-                <!--
-                <circle cx="320" cy="320" r="300" stroke="red" stroke-width="2" fill="white" />
-                <circle cx="320" cy="320" r="180" stroke="red" stroke-width="2" fill="white" />
-                -->
-         </div>
-        <div id="nodeDescription" class="description">
-            <div id="about2" hidden="true">
-                <h3>About Mat-Maps</h3>
-                <strong>Source:</strong><br>
-                <br<a href="https://github.com/kmork/mat.git">https://github.com/kmork/mat.git</a>
-                <br><br>
-                <strong>Published</strong>
-                <br>01-11-2013
-                <br><br>
-                <address>
-                    <strong>Feedback appreciated at</strong><br>
-                    <a href="mailto:#">knut.mork at gmail.com</a>
-                </address>
+@main("mat-maps") {
+    <div class="container">
+
+        <div class="content">
+            <div class="page-header">
+                <h1 class="span logo" style="margin-left: 0">mat-maps <span class="h1 small" style="color: #999999;font-size: 24.5px">beta</span></h1>
+                <h1>&nbsp;<a class="btn btn-primary pull-right" href="/new"><i class="icon-pencil icon-white"></i> New map</a></h1>
             </div>
-            <div id="MAT2" hidden="true">
-                <h3>MAT-Maps</h3>
-                Free to use concept map tool (concept maps, topic maps, mind maps) to help structuring your thoughts on a complex topic.
-            </div>
-            <div id="examples2" hidden="true">
-                <h3>Various examples of concept maps</h3>
+            <div class="row">
+                <div class="span10" id="map">
+                </div>
             </div>
         </div>
+
+        <footer>
+            <p>&copy; Knut Mork 2013</p>
+        </footer>
+
     </div>
+
+    <!--
+    <p>
+        Move the mouse over the concept map for more info,
+        or click the "New map" button to get started.
+    </p>
+    <p>
+        The FREE Concept Map Tool
+    </p>
+    <!--
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1000 1000">
+            <!--
+            <circle cx="320" cy="320" r="300" stroke="red" stroke-width="2" fill="white" />
+            <circle cx="320" cy="320" r="180" stroke="red" stroke-width="2" fill="white" />
+            -->
 }

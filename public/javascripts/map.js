@@ -1,8 +1,8 @@
 $(document).ready(function(){
     var graph = Viva.Graph.graph();
-    graph.addNode('MAT', "MAT-Maps");
+    graph.addNode('MAT', "The FREE Concept Map Tool. Structure your thoughts on a complex topic by creating concept maps, topic maps, or mind maps of your knowledge.");
     graph.addNode('about', 'About MAT-Maps');
-    graph.addNode('examples', 'Various examples of concept maps. The examples are all drawn by hand, and will be crazy I promise');
+    graph.addNode('examples', 'Various examples of concept maps');
     graph.addLink('MAT', 'about');
     graph.addLink('MAT', 'examples');
 
