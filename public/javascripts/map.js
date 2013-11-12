@@ -66,6 +66,7 @@ var rootNode;
 var rootNodeText;
 var rootImg;
 var nodeColor = "blue";
+var keyMode = true;
 
 $(document).ready(function(){
     var graph = Viva.Graph.graph();
@@ -121,11 +122,26 @@ $(document).ready(function(){
 });
 
 $(document).keypress(function(e) {
-    rootNode.data.label += String.fromCharCode(e.which);
-    if (e.which === 13) {
-        rootNodeText.text(rootNode.data.label);
-        rootImg.attr("stroke", "black");
-    } else {
-        rootNodeText.text(rootNode.data.label + '_');
+    if (keyMode) {
+        rootNode.data.label += String.fromCharCode(e.which);
+        if (e.which === 13) {
+            rootNodeText.text(rootNode.data.label);
+            rootImg.attr("stroke", "black");
+            keyMode = false;
+        } else {
+            rootNodeText.text(rootNode.data.label + '_');
+        }
+    }
+});
+
+$(document).on("keydown", function (e) {
+    if (e.which === 8) {
+        if (keyMode) {
+            rootNode.data.label = rootNode.data.label.substring(0, rootNode.data.label.length - 1);
+            rootNodeText.text(rootNode.data.label + '_');
+        }
+        if (!$(e.target).is("input, textarea")) {
+            e.preventDefault();
+        }
     }
 });
