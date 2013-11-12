@@ -62,18 +62,18 @@ $(document).ready(function(){
     renderer.run();
 });
 
-var rootNode;
-var rootNodeText;
-var rootImg;
-var nodeColor = "blue";
-var keyMode = true;
+var keyMode;
+var selectedNode;
+var graph = Viva.Graph.graph();
+var numNodes = 0;
+
+var addNode = function() {
+    selectedNode = graph.addNode('n' + numNodes, {label:'', description:''});
+    numNodes += 1;
+    keyMode = true;
+}
 
 $(document).ready(function(){
-    var graph = Viva.Graph.graph();
-    rootNode = graph.addNode('root', {label:'', description:''});
-    //var rootNode2 = graph.addNode('root2', {label:'', description:''});
-    //var rootNode3 = graph.addNode('root3', {label:'', description:''});
-
     var graphics = Viva.Graph.View.svgGraphics();
 
     var showNodeDescription = function(node, isOn) {
@@ -89,16 +89,16 @@ $(document).ready(function(){
 
     graphics.node(function(node) {
         var ui = Viva.Graph.svg('g').attr('id', node.id);
-        rootImg = Viva.Graph.svg('ellipse')
+        node.svgImg = Viva.Graph.svg('ellipse')
             .attr('rx', 50)
             .attr('ry', 25)
-            .attr("stroke", nodeColor)
+            .attr("stroke", "blue")
             .attr("stroke-width", 3)
             .attr("style", "fill:white");
-        rootNodeText = Viva.Graph.svg('text').attr('dx', node.id.length * -4 + 'px').attr('dy', '5px').text('_'),
+        node.svgLabel = Viva.Graph.svg('text').attr('dx', node.id.length * -4 + 'px').attr('dy', '5px').text('_'),
 
-        ui.append(rootImg);
-        ui.append(rootNodeText);
+        ui.append(node.svgImg);
+        ui.append(node.svgLabel);
 
         $(ui).hover(function() { // mouse over
             showNodeDescription(node, true);
@@ -109,27 +109,32 @@ $(document).ready(function(){
         return ui;
     }).placeNode(function(nodeUI, pos) {
             nodeUI.attr('transform',
-                'translate(' +
-                    (pos.x) + ',' + (pos.y) +
-                    ')');
+                'translate(' + pos.x + ',' + pos.y + ')');
         });
     var renderer = Viva.Graph.View.renderer(graph,
         {
             graphics : graphics,
             container: document.getElementById("newMap")
         });
+
+    addNode();
+
     renderer.run();
 });
 
 $(document).keypress(function(e) {
     if (keyMode) {
-        rootNode.data.label += String.fromCharCode(e.which);
+        selectedNode.data.label += String.fromCharCode(e.which);
         if (e.which === 13) {
-            rootNodeText.text(rootNode.data.label);
-            rootImg.attr("stroke", "black");
+            selectedNode.svgLabel.text(selectedNode.data.label);
+            selectedNode.svgImg.attr("stroke", "black");
             keyMode = false;
         } else {
-            rootNodeText.text(rootNode.data.label + '_');
+            selectedNode.svgLabel.text(selectedNode.data.label + '_');
+        }
+    } else {
+        if (e.which === 110) {
+            addNode();
         }
     }
 });
@@ -137,8 +142,8 @@ $(document).keypress(function(e) {
 $(document).on("keydown", function (e) {
     if (e.which === 8) {
         if (keyMode) {
-            rootNode.data.label = rootNode.data.label.substring(0, rootNode.data.label.length - 1);
-            rootNodeText.text(rootNode.data.label + '_');
+            selectedNode.data.label = selectedNode.data.label.substring(0, selectedNode.data.label.length - 1);
+            selectedNode.svgLabel.text(selectedNode.data.label + '_');
         }
         if (!$(e.target).is("input, textarea")) {
             e.preventDefault();
