@@ -25,7 +25,7 @@ graphics.node(function(node) {
         .attr("stroke", svgColor)
         .attr("stroke-width", 3)
         .attr("style", "fill:white");
-    node.svgLabel = Viva.Graph.svg('text').attr('dx', node.id.length * -4 + 'px').attr('dy', '5px').text(node.data.label),
+    node.svgLabel = Viva.Graph.svg('text').attr('dy', '5px').text(node.data.label),
 
         ui.append(node.svgImg);
     ui.append(node.svgLabel);
@@ -53,7 +53,7 @@ var displayMap = function(domElement) {
 
 var addNode = function() {
     svgColor = "blue";
-    selectedNode = graph.addNode('n' + numNodes, {label:'_', description:''});
+    selectedNode = graph.addNode('n' + numNodes, {label:'_', description:'Press "n" to create another concept'});
     numNodes += 1;
     keyMode = true;
 }
