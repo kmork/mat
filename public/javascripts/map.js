@@ -25,9 +25,8 @@ graphics.node(function(node) {
         .attr("stroke", svgColor)
         .attr("stroke-width", 3)
         .attr("style", "fill:white");
-    node.svgLabel = Viva.Graph.svg('text').attr('dy', '5px').text(node.data.label),
-
-        ui.append(node.svgImg);
+    node.svgLabel = Viva.Graph.svg('text').attr('dy', '5px').text(node.data.label);
+    ui.append(node.svgImg);
     ui.append(node.svgLabel);
 
     $(ui).hover(function() { // mouse over

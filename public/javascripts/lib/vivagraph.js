@@ -509,6 +509,17 @@ Viva.Graph.Utils.dragndrop = function (element) {
             move(e, e.clientX, e.clientY);
         },
 
+        handleTap = function (e) {
+            if (this.nodeName === 'g') {
+                e = e || window.event;
+                dragObject = e.target || e.srcElement;
+                if (element.id !== selectedNode) {
+                    graph.addLink(selectedNode.id, element.id);
+                    selectedNode = graph.getNode(element.id);
+                }
+            }
+        },
+
         handleMouseDown = function (e) {
             e = e || window.event;
             if (touchInProgress) {
@@ -680,6 +691,7 @@ Viva.Graph.Utils.dragndrop = function (element) {
 
     elementEvents.on('mousedown', handleMouseDown);
     elementEvents.on('touchstart', handleTouchStart);
+    elementEvents.on('click', handleTap);
 
     return {
         onStart : function (callback) {
