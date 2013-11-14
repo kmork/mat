@@ -57,6 +57,28 @@ var addNode = function() {
     keyMode = true;
 }
 
+var addLink = function() {
+    var firstNode;
+    var secondNode;
+    var s = graph.selectedNodes();
+    for (var id in s) {
+        if (s[id]) {
+            firstNode = id;
+            s[id] = null;
+            break;
+        }
+    }
+    for (var id in s) {
+        if (s[id]) {
+            secondNode = id;
+            s[id] = null;
+            break;
+        }
+    }
+    graph.addLink(firstNode, secondNode);
+    graph.clearSelected();
+}
+
 var addSiteMap = function() {
     // TODO: Dirty, should probably be put in separate js-files for each html-page?
     graph.addNode('MAT', {label: "MAT", description: "The FREE Concept Map Tool. Structure your thoughts on a complex topic by creating concept maps, topic maps, or mind maps of your knowledge."});
@@ -93,6 +115,8 @@ $(document).keypress(function(e) {
     } else {
         if (e.which === 110) {
             addNode();
+        } else if (e.which === 108) {
+            addLink();
         }
     }
 });

@@ -511,11 +511,11 @@ Viva.Graph.Utils.dragndrop = function (element) {
 
         handleTap = function (e) {
             if (this.nodeName === 'g') {
-                e = e || window.event;
-                dragObject = e.target || e.srcElement;
-                if (element.id !== selectedNode) {
-                    graph.addLink(selectedNode.id, element.id);
-                    selectedNode = graph.getNode(element.id);
+                var n = graph.toggleSelectedNode(element.id);
+                if (n[element.id]) {
+                    graph.getNode(element.id).svgImg.attr("style", "fill:gray");
+                } else {
+                    graph.getNode(element.id).svgImg.attr("style", "fill:white");
                 }
             }
         },
@@ -722,6 +722,7 @@ Viva.Graph.Utils.dragndrop = function (element) {
             documentEvents.stop('mousemove', handleMouseMove);
             documentEvents.stop('mousedown', handleMouseDown);
             documentEvents.stop('mouseup', handleMouseUp);
+            documentEvents.stop('click', handleTap);
             documentEvents.stop('touchmove', handleTouchMove);
             documentEvents.stop('touchend', handleTouchEnd);
             documentEvents.stop('touchcancel', handleTouchEnd);
@@ -1149,6 +1150,7 @@ Viva.Graph.graph = function () {
         links = [],
         nodesCount = 0,
         suspendEvents = 0,
+        selectedNodes = {},
 
     // Accumlates all changes made during graph updates.
     // Each change element contains:
@@ -1519,7 +1521,25 @@ Viva.Graph.graph = function () {
             }
 
             return null; // no link.
+        },
+        toggleSelectedNode : function (id) {
+            if (selectedNodes[id]) {
+                selectedNodes[id] = null;
+            } else {
+                selectedNodes[id] = true;
+            }
+            return selectedNodes;
+        },
+        selectedNodes : function () {
+            return selectedNodes;
+        },
+        clearSelected : function () {
+            selectedNodes = {};
+            for (node in nodes) {
+                nodes[node].svgImg.attr("style", "fill:white");
+            };
         }
+
     };
 
     // Let graph fire events before we return it to the caller.
