@@ -1,11 +1,3 @@
-var keyMode;
-var selectedNode;
-var graph = Viva.Graph.graph();
-var numNodes = 0;
-var svgColor = "black";
-
-var graphics = Viva.Graph.View.svgGraphics();
-
 var showNodeDescription = function(node, isOn) {
     $('#' + node.id).tipsy({
         gravity: 'w',
@@ -17,6 +9,7 @@ var showNodeDescription = function(node, isOn) {
     });
 }
 
+var graphics = Viva.Graph.View.svgGraphics();
 graphics.node(function(node) {
     var ui = Viva.Graph.svg('g').attr('id', node.id);
     node.svgImg = Viva.Graph.svg('ellipse')
@@ -41,46 +34,43 @@ graphics.node(function(node) {
             'translate(' + pos.x + ',' + pos.y + ')');
     });
 
+var graph = Viva.Graph.graph();
 var displayMap = function(domElement) {
     var renderer = Viva.Graph.View.renderer(graph,
         {
             graphics : graphics,
-            container: document.getElementById(domElement)
+            container: document.getElementById(domElement),
+            nodeSelected : function(node) {
+                node.svgImg.attr("style", "fill:gray");
+            },
+            nodeUnselected : function(node) {
+                node.svgImg.attr("style", "fill:white");
+            }
         });
     renderer.run();
 }
 
+var svgColor = "black";
+var keyMode;
+var selectedNode;
+
 var addNode = function() {
     svgColor = "blue";
-    selectedNode = graph.addNode('n' + numNodes, {label:'_', description:'Press "n" to create another concept'});
-    numNodes += 1;
+    selectedNode = graph.addNode('n' + graph.getNodesCount(), {label:'_', description:'Press "n" to create another concept'});
     keyMode = true;
 }
 
 var addLink = function() {
-    var firstNode;
-    var secondNode;
     var s = graph.selectedNodes();
-    for (var id in s) {
-        if (s[id]) {
-            firstNode = id;
-            s[id] = null;
-            break;
-        }
+    if (s.length === 2) {
+        graph.addLink(s[0], s[1]);
+        graph.clearSelected();
     }
-    for (var id in s) {
-        if (s[id]) {
-            secondNode = id;
-            s[id] = null;
-            break;
-        }
-    }
-    graph.addLink(firstNode, secondNode);
-    graph.clearSelected();
 }
 
 var addSiteMap = function() {
     // TODO: Dirty, should probably be put in separate js-files for each html-page?
+    // Will anyhow be changed to a readonly view of a specific persisted map
     graph.addNode('MAT', {label: "MAT", description: "The FREE Concept Map Tool. Structure your thoughts on a complex topic by creating concept maps, topic maps, or mind maps of your knowledge."});
     graph.addNode('about', {label: 'about', description: 'About MAT-Maps'});
     graph.addNode('examples', {label: 'examples', description: 'Various examples of concept maps'});

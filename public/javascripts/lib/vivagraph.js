@@ -452,6 +452,7 @@ Viva.Graph.Utils.dragndrop = function (element) {
     var start,
         drag,
         end,
+        click,
         scroll,
         prevSelectStart,
         prevDragStart,
@@ -511,12 +512,7 @@ Viva.Graph.Utils.dragndrop = function (element) {
 
         handleTap = function (e) {
             if (this.nodeName === 'g') {
-                var n = graph.toggleSelectedNode(element.id);
-                if (n[element.id]) {
-                    graph.getNode(element.id).svgImg.attr("style", "fill:gray");
-                } else {
-                    graph.getNode(element.id).svgImg.attr("style", "fill:white");
-                }
+                if (click) { click(element.id); }
             }
         },
 
@@ -709,6 +705,11 @@ Viva.Graph.Utils.dragndrop = function (element) {
             return this;
         },
 
+        onClick : function (callback) {
+            click = callback;
+            return this;
+        },
+
         /**
          * Occurs when mouse wheel event happens. callback = function(e, scrollDelta, scrollPoint);
          */
@@ -760,6 +761,9 @@ Viva.Input.domInputManager = function () {
                 }
                 if (typeof handlers.onStop === 'function') {
                     events.onStop(handlers.onStop);
+                }
+                if (typeof handlers.onClick === 'function') {
+                    events.onClick(handlers.onClick);
                 }
 
                 node.events = events;
@@ -1523,15 +1527,18 @@ Viva.Graph.graph = function () {
             return null; // no link.
         },
         toggleSelectedNode : function (id) {
-            if (selectedNodes[id]) {
-                selectedNodes[id] = null;
-            } else {
-                selectedNodes[id] = true;
-            }
-            return selectedNodes;
+            selectedNodes[id] = !selectedNodes[id];
+            return selectedNodes[id];
         },
+        // Returns an array of the selected node ids only
         selectedNodes : function () {
-            return selectedNodes;
+            return $.map(selectedNodes, function(value, key) {
+                if (value) {
+                    return key;
+                } else {
+                    return null;
+                }
+            });
         },
         clearSelected : function () {
             selectedNodes = {};
@@ -2789,6 +2796,8 @@ Viva.Graph.View.renderer = function (graph, settings) {
     var layout = settings.layout,
         graphics = settings.graphics,
         container = settings.container,
+        nodeSelected = settings.nodeSelected,
+        nodeUnselected = settings.nodeUnselected,
         inputManager,
         animationTimer,
         rendererInitialized = false,
@@ -2978,6 +2987,17 @@ Viva.Graph.View.renderer = function (graph, settings) {
                 onStop : function () {
                     node.isPinned = wasPinned;
                     userInteraction = false;
+                },
+                onClick : function (id) {
+                    if (graph.toggleSelectedNode(id)) {
+                        if (nodeSelected && typeof nodeSelected === 'function') {
+                            nodeSelected(graph.getNode(id));
+                        }
+                    } else {
+                        if (nodeUnselected && typeof nodeUnselected === 'function') {
+                            nodeUnselected(graph.getNode(id));
+                        }
+                    }
                 }
             });
         },
@@ -4134,20 +4154,12 @@ Viva.Graph.View.svgGraphics = function () {
         actualScale = 1,
     /*jshint unused: false */
         nodeBuilder = function (node) {
-
-            var ui = Viva.Graph.svg('g'),
-                svgText = Viva.Graph.svg('text').attr('dy', 0).attr('y', '-4px').text(node.id),
-                ellipse = Viva.Graph.svg('ellipse')
-                    .attr('rx', 50)
-                    .attr('ry', 25)
-                    .attr("stroke", "black")
-                    .attr("stroke-width", 3)
-                    .attr("style", "fill:white");
-
-            ui.append(ellipse);
-            ui.append(svgText);
-
-            return ui;
+            return Viva.Graph.svg("rectangle")
+                .attr("rx", 50)
+                .attr("ry", 25)
+                .attr("stroke", "black")
+                .attr("stroke-width", 3)
+                .attr("style", "fill:white");
         },
 
         nodePositionCallback = function (nodeUI, pos) {
