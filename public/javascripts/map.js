@@ -7,7 +7,9 @@ var showNodeDescription = function(node, isOn) {
             return node.data.description;
         }
     });
-}
+};
+
+var defaultStyle = "fill:white";
 
 var graphics = Viva.Graph.View.svgGraphics();
 graphics.node(function(node) {
@@ -17,10 +19,21 @@ graphics.node(function(node) {
         .attr('ry', 25)
         .attr("stroke", svgColor)
         .attr("stroke-width", 3)
-        .attr("style", "fill:white");
+        .attr("style", defaultStyle);
     node.svgLabel = Viva.Graph.svg('text').attr('dy', '5px').text(node.data.label);
     ui.append(node.svgImg);
     ui.append(node.svgLabel);
+
+    node.toggleNodeSelected = function() {
+        node.selected = !node.selected;
+        if (node.selected) {
+            node.svgImg.attr("style", "fill:grey");
+        } else {
+            node.svgImg.attr("style", defaultStyle);
+        }
+    };
+
+    ui.addEventListener("click", node.toggleNodeSelected);
 
     $(ui).hover(function() { // mouse over
         showNodeDescription(node, true);
@@ -39,16 +52,22 @@ var displayMap = function(domElement) {
     var renderer = Viva.Graph.View.renderer(graph,
         {
             graphics : graphics,
-            container: document.getElementById(domElement),
-            nodeSelected : function(node) {
-                node.svgImg.attr("style", "fill:gray");
-            },
-            nodeUnselected : function(node) {
-                node.svgImg.attr("style", "fill:white");
-            }
+            container: document.getElementById(domElement)
         });
     renderer.run();
 }
+
+// Returns an array of the selected node ids only
+var selectedNodes = function() {
+    var selected = [];
+    graph.forEachNode(function(node) {
+        if (node.selected) {
+            selected.push(node.id);
+        }
+        false;
+    });
+    return selected;
+};
 
 var svgColor = "black";
 var keyMode;
@@ -61,10 +80,11 @@ var addNode = function() {
 }
 
 var addLink = function() {
-    var s = graph.selectedNodes();
+    var s = selectedNodes();
     if (s.length === 2) {
         graph.addLink(s[0], s[1]);
-        graph.clearSelected();
+        graph.getNode(s[0]).toggleNodeSelected();
+        graph.getNode(s[1]).toggleNodeSelected();
     }
 }
 

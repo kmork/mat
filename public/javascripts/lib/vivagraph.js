@@ -452,7 +452,6 @@ Viva.Graph.Utils.dragndrop = function (element) {
     var start,
         drag,
         end,
-        click,
         scroll,
         prevSelectStart,
         prevDragStart,
@@ -508,12 +507,6 @@ Viva.Graph.Utils.dragndrop = function (element) {
             e = e || window.event;
 
             move(e, e.clientX, e.clientY);
-        },
-
-        handleTap = function (e) {
-            if (this.nodeName === 'g') {
-                if (click) { click(element.id); }
-            }
         },
 
         handleMouseDown = function (e) {
@@ -687,7 +680,6 @@ Viva.Graph.Utils.dragndrop = function (element) {
 
     elementEvents.on('mousedown', handleMouseDown);
     elementEvents.on('touchstart', handleTouchStart);
-    elementEvents.on('click', handleTap);
 
     return {
         onStart : function (callback) {
@@ -705,11 +697,6 @@ Viva.Graph.Utils.dragndrop = function (element) {
             return this;
         },
 
-        onClick : function (callback) {
-            click = callback;
-            return this;
-        },
-
         /**
          * Occurs when mouse wheel event happens. callback = function(e, scrollDelta, scrollPoint);
          */
@@ -723,7 +710,6 @@ Viva.Graph.Utils.dragndrop = function (element) {
             documentEvents.stop('mousemove', handleMouseMove);
             documentEvents.stop('mousedown', handleMouseDown);
             documentEvents.stop('mouseup', handleMouseUp);
-            documentEvents.stop('click', handleTap);
             documentEvents.stop('touchmove', handleTouchMove);
             documentEvents.stop('touchend', handleTouchEnd);
             documentEvents.stop('touchcancel', handleTouchEnd);
@@ -761,9 +747,6 @@ Viva.Input.domInputManager = function () {
                 }
                 if (typeof handlers.onStop === 'function') {
                     events.onStop(handlers.onStop);
-                }
-                if (typeof handlers.onClick === 'function') {
-                    events.onClick(handlers.onClick);
                 }
 
                 node.events = events;
@@ -1154,7 +1137,6 @@ Viva.Graph.graph = function () {
         links = [],
         nodesCount = 0,
         suspendEvents = 0,
-        selectedNodes = {},
 
     // Accumlates all changes made during graph updates.
     // Each change element contains:
@@ -1525,28 +1507,7 @@ Viva.Graph.graph = function () {
             }
 
             return null; // no link.
-        },
-        toggleSelectedNode : function (id) {
-            selectedNodes[id] = !selectedNodes[id];
-            return selectedNodes[id];
-        },
-        // Returns an array of the selected node ids only
-        selectedNodes : function () {
-            return $.map(selectedNodes, function(value, key) {
-                if (value) {
-                    return key;
-                } else {
-                    return null;
-                }
-            });
-        },
-        clearSelected : function () {
-            selectedNodes = {};
-            for (node in nodes) {
-                nodes[node].svgImg.attr("style", "fill:white");
-            };
         }
-
     };
 
     // Let graph fire events before we return it to the caller.
@@ -2796,8 +2757,6 @@ Viva.Graph.View.renderer = function (graph, settings) {
     var layout = settings.layout,
         graphics = settings.graphics,
         container = settings.container,
-        nodeSelected = settings.nodeSelected,
-        nodeUnselected = settings.nodeUnselected,
         inputManager,
         animationTimer,
         rendererInitialized = false,
@@ -2987,17 +2946,6 @@ Viva.Graph.View.renderer = function (graph, settings) {
                 onStop : function () {
                     node.isPinned = wasPinned;
                     userInteraction = false;
-                },
-                onClick : function (id) {
-                    if (graph.toggleSelectedNode(id)) {
-                        if (nodeSelected && typeof nodeSelected === 'function') {
-                            nodeSelected(graph.getNode(id));
-                        }
-                    } else {
-                        if (nodeUnselected && typeof nodeUnselected === 'function') {
-                            nodeUnselected(graph.getNode(id));
-                        }
-                    }
                 }
             });
         },
