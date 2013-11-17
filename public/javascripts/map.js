@@ -27,7 +27,7 @@ graphics.node(function(node) {
     node.toggleNodeSelected = function() {
         node.selected = !node.selected;
         if (node.selected) {
-            node.svgImg.attr("style", "fill:grey");
+            node.svgImg.attr("style", "fill:lightgrey");
         } else {
             node.svgImg.attr("style", defaultStyle);
         }
@@ -74,8 +74,14 @@ var keyMode;
 var selectedNode;
 
 var addNode = function() {
-    svgColor = "blue";
     selectedNode = graph.addNode('n' + graph.getNodesCount(), {label:'_', description:'Press "n" to create another concept'});
+};
+
+var labelNode = function() {
+    //svgColor = "blue";
+    if (!selectedNode) {
+        selectedNode = graph.getNode(selectedNodes()[0]);
+    }
     keyMode = true;
 };
 
@@ -121,6 +127,7 @@ $(document).ready(function(){
     // TODO: Dirty, should probably be put in separate js-files for each html-page?
     if ($('#newMap').length ) {
         addNode();
+        labelNode();
         displayMap("newMap");
     } else if ($('#map').length ) {
         addSiteMap();
@@ -134,33 +141,39 @@ $(document).keypress(function(e) {
             selectedNode.data.label = '';
         }
         selectedNode.data.label += String.fromCharCode(e.which);
-        if (e.which === 13) {
+        if (e.which === 13) { // Enter
             selectedNode.svgLabel.text(selectedNode.data.label);
             selectedNode.svgImg.attr("stroke", "black");
+            selectedNode = null;
             keyMode = false;
         } else {
             selectedNode.svgLabel.text(selectedNode.data.label + '_');
         }
     } else {
-        if (e.which === 110) {
+        if (e.which === 110) { // n
             addNode();
-        } else if (e.which === 108) {
+            labelNode();
+        } else if (e.which === 108) { // l
             addLink();
-        } else if (e.which === 117) {
+        } else if (e.which === 116) { // t
+            if (selectedNodes().length === 1) {
+                labelNode();
+            }
+        } else if (e.which === 117) { // u
             removeLink();
-        } else if (e.which === 100) {
+        } else if (e.which === 100) { // d
             removeNode();
         }
     }
 });
 
 $(document).on("keydown", function (e) {
-    if (e.which === 8) {
+    if (e.which === 8) { // del
         if (keyMode) {
             selectedNode.data.label = selectedNode.data.label.substring(0, selectedNode.data.label.length - 1);
             selectedNode.svgLabel.text(selectedNode.data.label + '_');
         }
-        if (!$(e.target).is("input, textarea")) {
+        if (!$(e.target).is("input, textarea")) { // Do not act as browser back button
             e.preventDefault();
         }
     }
