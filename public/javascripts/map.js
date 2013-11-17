@@ -88,6 +88,19 @@ var addLink = function() {
     }
 }
 
+var removeLink = function() {
+    var s = selectedNodes();
+    if (s.length === 2) {
+        // intersection of the links associated with the two nodes should yield the one
+        // we are looking for (only one link is currently allowed between two nodes).
+        graph.removeLink(graph.getLinks(s[0]).filter(function(n) {
+            return graph.getLinks(s[1]).indexOf(n) != -1
+        })[0]);
+        graph.getNode(s[0]).toggleNodeSelected();
+        graph.getNode(s[1]).toggleNodeSelected();
+    }
+}
+
 var addSiteMap = function() {
     // TODO: Dirty, should probably be put in separate js-files for each html-page?
     // Will anyhow be changed to a readonly view of a specific persisted map
@@ -127,6 +140,8 @@ $(document).keypress(function(e) {
             addNode();
         } else if (e.which === 108) {
             addLink();
+        } else if (e.which === 117) {
+            removeLink();
         }
     }
 });
