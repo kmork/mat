@@ -10,7 +10,12 @@ object Application extends Controller {
   }
 
   def newMap = Action {
-    Ok(views.html.newMap())
+    Redirect(routes.Application.getMap("dsf"));
+  }
+
+  // Redirect to /hello/Bob
+  def getMap(id: String) = Action {
+    Ok(views.html.newMap());
   }
 
 }
