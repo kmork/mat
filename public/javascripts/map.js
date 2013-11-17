@@ -55,7 +55,7 @@ var displayMap = function(domElement) {
             container: document.getElementById(domElement)
         });
     renderer.run();
-}
+};
 
 // Returns an array of the selected node ids only
 var selectedNodes = function() {
@@ -77,7 +77,7 @@ var addNode = function() {
     svgColor = "blue";
     selectedNode = graph.addNode('n' + graph.getNodesCount(), {label:'_', description:'Press "n" to create another concept'});
     keyMode = true;
-}
+};
 
 var addLink = function() {
     var s = selectedNodes();
@@ -86,7 +86,7 @@ var addLink = function() {
         graph.getNode(s[0]).toggleNodeSelected();
         graph.getNode(s[1]).toggleNodeSelected();
     }
-}
+};
 
 var removeLink = function() {
     var s = selectedNodes();
@@ -99,6 +99,12 @@ var removeLink = function() {
         graph.getNode(s[0]).toggleNodeSelected();
         graph.getNode(s[1]).toggleNodeSelected();
     }
+};
+
+var removeNode = function() {
+    selectedNodes().forEach(function(nodeId) {
+        graph.removeNode(nodeId);
+    });
 }
 
 var addSiteMap = function() {
@@ -109,7 +115,7 @@ var addSiteMap = function() {
     graph.addNode('examples', {label: 'examples', description: 'Various examples of concept maps'});
     graph.addLink('MAT', 'about');
     graph.addLink('MAT', 'examples');
-}
+};
 
 $(document).ready(function(){
     // TODO: Dirty, should probably be put in separate js-files for each html-page?
@@ -142,6 +148,8 @@ $(document).keypress(function(e) {
             addLink();
         } else if (e.which === 117) {
             removeLink();
+        } else if (e.which === 100) {
+            removeNode();
         }
     }
 });
