@@ -1,6 +1,5 @@
 package controllers
 
-import play.api._
 import play.api.mvc._
 
 object Application extends Controller {
@@ -10,10 +9,9 @@ object Application extends Controller {
   }
 
   def newMap = Action {
-    Redirect(routes.Application.getMap("dsf"));
+    Redirect(routes.Application.getMap(RandomString.createRandomString(16)));
   }
 
-  // Redirect to /hello/Bob
   def getMap(id: String) = Action {
     Ok(views.html.newMap());
   }
