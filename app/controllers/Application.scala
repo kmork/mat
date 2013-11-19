@@ -30,4 +30,9 @@ object Application extends Controller {
   def getMap(id: String) = Action {
     Ok(views.html.newMap());
   }
+
+  def saveMap(id: String, content: String) = Action {
+    println(content);
+    Ok("");
+  }
 }

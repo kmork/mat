@@ -75,6 +75,7 @@ var selectedNode;
 
 var addNode = function() {
     selectedNode = graph.addNode('n' + graph.getNodesCount(), {label:'_', description:'Press "n" to create another concept'});
+    save("addNode(n" + (graph.getNodesCount() - 1) + ")");
 };
 
 var labelNode = function() {
@@ -89,6 +90,7 @@ var addLink = function() {
     var s = selectedNodes();
     if (s.length === 2) {
         graph.addLink(s[0], s[1]);
+        save("addLink(" + s[0] + "," + s[1] + ")");
         graph.getNode(s[0]).toggleNodeSelected();
         graph.getNode(s[1]).toggleNodeSelected();
     }
@@ -143,6 +145,7 @@ $(document).keypress(function(e) {
         selectedNode.data.label += String.fromCharCode(e.which);
         if (e.which === 13) { // Enter
             selectedNode.svgLabel.text(selectedNode.data.label);
+            save("setLabel(" + selectedNode.id + "," + selectedNode.data.label + ")");
             selectedNode.svgImg.attr("stroke", "black");
             selectedNode = null;
             keyMode = false;
@@ -178,3 +181,9 @@ $(document).on("keydown", function (e) {
         }
     }
 });
+
+var save = function(cmd) {
+    $.ajax({
+        url: window.location.pathname + "/save?content=" + cmd
+    });
+}

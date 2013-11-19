@@ -3,14 +3,16 @@
 # ~~~~
 
 # Home page
-GET         /                    controllers.Application.index
+GET        /                     controllers.Application.index
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file        controllers.Assets.at(path="/public", file)
+GET        /assets/*file         controllers.Assets.at(path="/public", file)
 
 # New map page
-GET         /new                 controllers.Application.newMap
+GET        /new                  controllers.Application.newMap
 
 # Specific (read or write) server-stored map
-GET         /maps/:id            controllers.Application.getMap(id)
+GET        /maps/:id             controllers.Application.getMap(id)
+
+GET        /maps/:id/save        controllers.Application.saveMap(id, content)
 
