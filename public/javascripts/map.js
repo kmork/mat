@@ -136,6 +136,9 @@ $(document).ready(function(){
     } else if ($('#map').length ) {
         addSiteMap();
         displayMap("map");
+    } else if ($('#loadMap').length ) {
+        load();
+        displayMap("loadMap");
     }
 });
 
@@ -188,4 +191,39 @@ var save = function(cmd) {
     $.ajax({
         url: window.location.pathname + "/save?content=" + cmd
     });
+}
+
+var load = function() {
+    $.ajax({
+        url: window.location.pathname + "/load",
+        success: initMap,
+        error: function(err) {
+            console.log(err);
+        }
+    });
+}
+
+var initMap = function(mapData) {
+    for (var key in mapData) {
+        if (mapData.hasOwnProperty(key)) {
+            var cmd = mapData[key].command.split(',');
+            switch (cmd[0]) {
+                case "an":
+                    graph.addNode(cmd[1], {label:'_', description:''});
+                    break;
+                case "al":
+                    graph.addLink(cmd[1], cmd[2]);
+                    break;
+                case "sl":
+                    selectedNode = graph.getNode(cmd[1]);
+                    selectedNode.data.label = cmd[2];
+                    selectedNode.svgLabel.text(selectedNode.data.label);
+                    selectedNode = null;
+                    keyMode = false;
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 }

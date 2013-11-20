@@ -14,5 +14,8 @@ GET        /new                  controllers.Application.newMap
 # Specific (read or write) server-stored map
 GET        /maps/:id             controllers.Application.getMap(id)
 
+# Save latest map data
 GET        /maps/:id/save        controllers.Application.saveMap(id, content)
 
+# Load map data
+GET        /maps/:id/load        controllers.Application.loadMap(id)
