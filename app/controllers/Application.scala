@@ -9,8 +9,7 @@ object Application extends Controller {
 
   val uri = MongoClientURI(Play.configuration.getString("mongodb.uri").get);
   val mongoClient = MongoClient(uri);
-  val db = mongoClient("matmaps");
-  val coll = db("map");
+  val coll = mongoClient("matmaps")("map");
 
   def index = Action {
     Ok(views.html.index())
@@ -32,7 +31,8 @@ object Application extends Controller {
   }
 
   def saveMap(id: String, content: String) = Action {
-    println(content);
+    val updateQ = $push ("content" -> MongoDBObject("command" -> content));
+    coll.update(MongoDBObject("id" -> id), updateQ);
     Ok("");
   }
 }
