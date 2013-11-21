@@ -25,7 +25,10 @@ graphics.node(function(node) {
         .attr("stroke", svgColor)
         .attr("stroke-width", 3)
         .attr("style", defaultStyle);
-    node.svgLabel = Viva.Graph.svg('text').attr('dy', '5px').text(node.data.label);
+    node.svgLabel = Viva.Graph.svg('text')
+        .attr('dy', '5px')
+        .attr('style', 'text-anchor: middle')
+        .text(node.data.label);
     ui.append(node.svgImg);
     ui.append(node.svgLabel);
 

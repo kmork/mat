@@ -4010,9 +4010,6 @@ Viva.Graph.svg = function (element) {
     };
 
     svgElement.text = function (textContent) {
-        if (typeof textContent === "string") {
-            this.attr('dx', textContent.length * -3.5 + 'px');
-        }
         if (typeof textContent !== "undefined") {
             svgElement.textContent = textContent;
             return svgElement;
