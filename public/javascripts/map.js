@@ -117,31 +117,6 @@ var removeNode = function() {
     });
 }
 
-var addSiteMap = function() {
-    // TODO: Dirty, should probably be put in separate js-files for each html-page?
-    // Will anyhow be changed to a readonly view of a specific persisted map
-    graph.addNode('MAT', {label: "MAT", description: "The FREE Concept Map Tool. Structure your thoughts on a complex topic by creating concept maps, topic maps, or mind maps of your knowledge."});
-    graph.addNode('about', {label: 'about', description: 'About MAT-Maps'});
-    graph.addNode('examples', {label: 'examples', description: 'Various examples of concept maps'});
-    graph.addLink('MAT', 'about');
-    graph.addLink('MAT', 'examples');
-};
-
-$(document).ready(function(){
-    // TODO: Dirty, should probably be put in separate js-files for each html-page?
-    if ($('#newMap').length ) {
-        addNode();
-        labelNode();
-        displayMap("newMap");
-    } else if ($('#map').length ) {
-        addSiteMap();
-        displayMap("map");
-    } else if ($('#loadMap').length ) {
-        load();
-        displayMap("loadMap");
-    }
-});
-
 $(document).keypress(function(e) {
     if (keyMode) {
         if (selectedNode.data.label === '_') {
