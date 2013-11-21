@@ -156,7 +156,10 @@ var initMap = function(mapData) {
                     graph.removeLink(graph.getLinks(cmd[1]).filter(function(n) {
                         return graph.getLinks(cmd[2]).indexOf(n) != -1
                     })[0]);
-
+                    break;
+                case "rn":
+                    graph.removeNode(cmd[1]);
+                    break;
                 default:
                     break;
             }
