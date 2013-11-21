@@ -146,7 +146,7 @@ var initMap = function(mapData) {
                     break;
                 case "sl":
                     selectedNode = graph.getNode(cmd[1]);
-                    selectedNode.data.label = cmd[2];
+                    selectedNode.data.label = mapData[key].command.substring(cmd[0].length + 1 + cmd[1].length + 1);
                     selectedNode.svgLabel.text(selectedNode.data.label);
                     selectedNode = null;
                     keyMode = false;
