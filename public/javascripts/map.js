@@ -1,3 +1,10 @@
+var defaultStyle = "fill:white";
+var svgColor = "black";
+var keyMode;
+var selectedNode;
+
+var graph = Viva.Graph.graph();
+
 var showNodeDescription = function(node, isOn) {
     $('#' + node.id).tipsy({
         gravity: 'w',
@@ -8,8 +15,6 @@ var showNodeDescription = function(node, isOn) {
         }
     });
 };
-
-var defaultStyle = "fill:white";
 
 var graphics = Viva.Graph.View.svgGraphics();
 graphics.node(function(node) {
@@ -47,7 +52,6 @@ graphics.node(function(node) {
             'translate(' + pos.x + ',' + pos.y + ')');
     });
 
-var graph = Viva.Graph.graph();
 var displayMap = function(domElement) {
     var renderer = Viva.Graph.View.renderer(graph,
         {
@@ -68,10 +72,6 @@ var selectedNodes = function() {
     });
     return selected;
 };
-
-var svgColor = "black";
-var keyMode;
-var selectedNode;
 
 var addNode = function() {
     selectedNode = graph.addNode('n' + graph.getNodesCount(), {label:'_', description:'Press "n" to create another concept'});
@@ -115,6 +115,53 @@ var removeNode = function() {
         graph.removeNode(nodeId);
         save("rn," + nodeId);
     });
+}
+
+var save = function(cmd) {
+    $.ajax({
+        url: window.location.pathname + "/save?content=" + cmd
+    });
+}
+
+var load = function() {
+    $.ajax({
+        url: window.location.pathname + "/load",
+        success: initMap,
+        error: function(err) {
+            console.log(err);
+        }
+    });
+}
+
+var initMap = function(mapData) {
+    for (var key in mapData) {
+        if (mapData.hasOwnProperty(key)) {
+            var cmd = mapData[key].command.split(',');
+            switch (cmd[0]) {
+                case "an":
+                    graph.addNode(cmd[1], {label:'_', description:''});
+                    break;
+                case "al":
+                    graph.addLink(cmd[1], cmd[2]);
+                    break;
+                case "sl":
+                    selectedNode = graph.getNode(cmd[1]);
+                    selectedNode.data.label = cmd[2];
+                    selectedNode.svgLabel.text(selectedNode.data.label);
+                    selectedNode = null;
+                    keyMode = false;
+                    break;
+                case "rl":
+                    s =
+                    graph.removeLink(graph.getLinks(cmd[1]).filter(function(n) {
+                        return graph.getLinks(cmd[2]).indexOf(n) != -1
+                    })[0]);
+
+                default:
+                    break;
+            }
+        }
+    }
 }
 
 $(document).keypress(function(e) {
@@ -161,44 +208,3 @@ $(document).on("keydown", function (e) {
         }
     }
 });
-
-var save = function(cmd) {
-    $.ajax({
-        url: window.location.pathname + "/save?content=" + cmd
-    });
-}
-
-var load = function() {
-    $.ajax({
-        url: window.location.pathname + "/load",
-        success: initMap,
-        error: function(err) {
-            console.log(err);
-        }
-    });
-}
-
-var initMap = function(mapData) {
-    for (var key in mapData) {
-        if (mapData.hasOwnProperty(key)) {
-            var cmd = mapData[key].command.split(',');
-            switch (cmd[0]) {
-                case "an":
-                    graph.addNode(cmd[1], {label:'_', description:''});
-                    break;
-                case "al":
-                    graph.addLink(cmd[1], cmd[2]);
-                    break;
-                case "sl":
-                    selectedNode = graph.getNode(cmd[1]);
-                    selectedNode.data.label = cmd[2];
-                    selectedNode.svgLabel.text(selectedNode.data.label);
-                    selectedNode = null;
-                    keyMode = false;
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-}
