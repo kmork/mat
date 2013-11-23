@@ -1,11 +1,15 @@
 @main("silly-maps") {
     <script>
         var addSiteMap = function() {
-            graph.addNode('SillyMaps', {label: "Silly-Maps", description: "The FREE Concept Map Tool. Structure your thoughts on a complex topic by creating concept maps, topic maps, or mind maps of your knowledge."});
-            graph.addNode('about', {label: 'about', description: 'About Silly-Maps'});
+            graph.addNode('silly-maps', {label: "silly-maps", description: "The FREE Concept Map Tool. Structure your thoughts on a complex topic by creating concept maps, topic maps, or mind maps of your knowledge."});
+            graph.addNode('about', {label: 'about', description: 'About silly-maps'});
             graph.addNode('examples', {label: 'examples', description: 'Various examples of concept maps'});
-            graph.addLink('SillyMaps', 'about');
-            graph.addLink('SillyMaps', 'examples');
+            graph.addNode('feedback', {label: 'feedback', description: 'All feedback appreciated!'});
+            graph.addNode('help', {label: 'help', description: 'Explains how to create your own maps'});
+            graph.addLink('silly-maps', 'about');
+            graph.addLink('silly-maps', 'examples');
+            graph.addLink('silly-maps', 'feedback');
+            graph.addLink('silly-maps', 'help');
             };
 
         $(document).ready(function(){
@@ -14,10 +18,6 @@
         });
     </script>
 
-    <!--
-    <p>
-        The FREE Concept Map Tool
-    </p>
     <!--
     <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1000 1000">
         <!--
