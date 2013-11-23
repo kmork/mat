@@ -1,6 +1,6 @@
-MatMaps
+Silly-Maps
 ===
 
-MatMaps - the Mind Amplifying Tool
+Silly-Maps - the Mind Amplifying Tool
 
-Hosted on: http://infinite-citadel-9265.herokuapp.com/
+Hosted on: http://www.sillymaps.com/
