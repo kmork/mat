@@ -2,6 +2,7 @@ var defaultStyle = "fill:white";
 var svgColor = "black";
 var keyMode;
 var selectedNode;
+var commands = [];
 
 var graph = Viva.Graph.graph();
 
@@ -121,8 +122,12 @@ var removeNode = function() {
 }
 
 var save = function(cmd) {
+    var id = commands.push(cmd);
     $.ajax({
-        url: window.location.pathname + "/save?content=" + cmd
+        url: window.location.pathname + "/save?cmdId=" + id + "&content=" + cmd,
+        error: function(err) {
+            console.log("Failed to save command with id: " + id + ".", err);
+        }
     });
 }
 

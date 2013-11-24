@@ -28,8 +28,8 @@ object Application extends Controller {
     Redirect(routes.Application.getMap(mapId))
   }
 
-  def getMap(id: String) = Action {
-    coll.findOne(MongoDBObject("id" -> id)) match {
+  def getMap(mapId: String) = Action {
+    coll.findOne(MongoDBObject("id" -> mapId)) match {
       case Some(map) =>
         if (map.get("content") != null) {
           Ok(views.html.loadMap())
@@ -40,14 +40,14 @@ object Application extends Controller {
     };
   }
 
-  def saveMap(id: String, content: String) = Action {
+  def saveMap(mapId: String, cmdId: String, content: String) = Action {
     val updateQ = $push ("content" -> MongoDBObject("command" -> content))
-    coll.update(MongoDBObject("id" -> id), updateQ)
+    coll.update(MongoDBObject("id" -> mapId), updateQ)
     Ok
   }
 
-  def loadMap(id: String) = Action {
-    coll.findOne(MongoDBObject("id" -> id) ++ ("content" $exists true )) match {
+  def loadMap(mapId: String) = Action {
+    coll.findOne(MongoDBObject("id" -> mapId) ++ ("content" $exists true )) match {
       case Some(map) => Ok(Json.parse(map("content").toString()))
       case None => NotFound
     };
