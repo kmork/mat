@@ -1,4 +1,22 @@
 @main("silly-maps") {
+    <ul>
+        <li id="slide1">
+        </li>
+        <li id="slide2">
+            <h3>Another text</h3>
+            <div>
+                <div class="cbp-content">
+                    <p>Chicory collard greens tatsoi cress bamboo shoot broccoli rabe lotus root earthnut pea arugula okra welsh onion leek shallot courgette. Chard garlic fava bean pea sprouts gram spinach plantain tomatillo. Chicory garlic black-eyed pea gourd chickpea cucumber lotus root.</p>
+                    <p>Daikon artichoke gumbo azuki bean bok choy avocado winter purslane gram earthnut pea broccoli salsify squash plantain wattle seed wakame broccoli rabe bamboo shoot. Zucchini lotus root azuki bean epazote dulse pumpkin rutabaga spinach. Endive mung bean gumbo maize plantain rock melon.</p>
+                </div>
+            </div>
+        </li>
+    </ul>
+    <nav>
+        <a href="#slide1">Map</a>
+        <a href="#slide2">Description</a>
+    </nav>
+
     <script>
         var addSiteMap = function() {
             graph.addNode('silly-maps', {label: "silly-maps", description: "The FREE Concept Map Tool. Structure your thoughts on a complex topic by creating concept maps, topic maps, or mind maps of your knowledge."});
@@ -14,7 +32,8 @@
 
         $(document).ready(function(){
             addSiteMap();
-            displayMap("map");
+            displayMap("slide1");
+            $( '#map' ).cbpContentSlider();
         });
     </script>
 

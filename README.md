@@ -18,3 +18,12 @@ Technology stack: PlayFramework, Scala, HTML5, Javascript, SVG, and MongoDB.
 Javascript frameworks include vivagraph, jquery, and bootstrap
 
 
+Examples
+====
+
+- Molecule arrangements?
+- Development of programming languages?
+- Development of various other scientific fields ? Mathematics, astronomy, physics, etc?
+- Who flirted with whom in various pulp fiction novels?
+- Relationships between the books in my bookshelf?
+- Sub-fields to master in order to become successful in software development projects?

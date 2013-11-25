@@ -11,6 +11,7 @@
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.css")">
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/tipsy.css")"/>
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/slider.css")"/>
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
 
         <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
@@ -22,6 +23,8 @@
         <script src="@routes.Assets.at("javascripts/lib/jquery.tipsy.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/lib/bootstrap.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/lib/vivagraph.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/lib/modernizr.custom.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/lib/jquery.cbpContentSlider.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/google-analytics.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/map.js")" type="text/javascript"></script>
     </head>
@@ -34,7 +37,7 @@
                     <h1>&nbsp;<a class="btn btn-primary pull-right" href="/new"><i class="icon-pencil icon-white"></i> New map</a></h1>
                 </div>
                 <div class="row">
-                    <div class="span10" id="map">
+                    <div class="span10 cbp-contentslider" id="map" >
                         @content
                     </div>
                 </div>
