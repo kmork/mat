@@ -1,4 +1,5 @@
 var defaultStyle = "fill:white";
+var selectedStyle = "fill:blanchedalmond";
 var svgColor = "black";
 var keyMode;
 var selectedNode;
@@ -41,7 +42,7 @@ graphics.node(function(node) {
         } else {
             node.selected = !node.selected;
             if (node.selected) {
-                node.svgImg.attr("style", "fill:lightgrey");
+                node.svgImg.attr("style", selectedStyle);
             } else {
                 node.svgImg.attr("style", defaultStyle);
             }
@@ -51,8 +52,10 @@ graphics.node(function(node) {
     ui.addEventListener("click", node.toggleNodeSelected);
 
     $(ui).hover(function() { // mouse over
+        if (!node.selected) { node.svgImg.attr("style", selectedStyle) };
         showNodeDescription(node, true);
     }, function() { // mouse out
+        if (!node.selected) { node.svgImg.attr("style", defaultStyle) };
         showNodeDescription(node, false);
     });
 
