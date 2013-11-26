@@ -52,6 +52,10 @@ html, body, .container, .main { height: 100%;}
 	transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
 }
 
+.cbp-contentslider nav a.rc-active {
+    visibility:hidden;
+}
+
 .cbp-contentslider h3 {
 	height: 2em;
 	line-height: 1.7;
