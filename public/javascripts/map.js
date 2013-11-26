@@ -38,6 +38,8 @@ graphics.node(function(node) {
     node.toggleNodeSelected = function() {
         if (readonly) {
             $("#description-header").html(node.data.label);
+            $("#description-content").load("assets/html/" + node.data.label + ".html");
+
             $("#node-description").click();
         } else {
             node.selected = !node.selected;
