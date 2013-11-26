@@ -34,9 +34,22 @@ html, body, .container, .main { height: 100%;}
 	z-index: 100;
 }
 
+.cbp-contentslider nav {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 3.313em;
+	overflow: hidden;
+}
 
-.cbp-contentslider nav a:hover:before {
-	color: rgba(255,255,255,0.9);
+.cbp-contentslider nav a {
+	letter-spacing: 0.1em;
+	padding-left: 1.125em;
+	text-transform: uppercase;
+	-webkit-transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+	-moz-transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+	transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
 }
 
 .cbp-contentslider h3 {
@@ -101,12 +114,6 @@ html, body, .container, .main { height: 100%;}
 @media screen and (max-width: 67.75em) {
 
 	.cbp-contentslider { font-size: 85%; }
-
-	.cbp-contentslider nav a[class^="icon-"]:before, 
-	.cbp-contentslider nav a[class*=" icon-"]:before {
-		left: 50%;
-		margin-left: -1.250em;
-	}
 
 	.cbp-contentslider nav a span {
 		display: none;

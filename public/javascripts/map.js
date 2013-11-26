@@ -36,7 +36,8 @@ graphics.node(function(node) {
     node.toggleNodeSelected = function() {
         node.selected = !node.selected;
         if (node.selected) {
-            node.svgImg.attr("style", "fill:lightgrey");
+            $("#node-description").click();
+            //node.svgImg.attr("style", "fill:lightgrey");
         } else {
             node.svgImg.attr("style", defaultStyle);
         }
