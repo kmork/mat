@@ -3,6 +3,7 @@ var svgColor = "black";
 var keyMode;
 var selectedNode;
 var commands = [];
+var readonly = true;
 
 var graph = Viva.Graph.graph();
 
@@ -34,12 +35,16 @@ graphics.node(function(node) {
     ui.append(node.svgLabel);
 
     node.toggleNodeSelected = function() {
-        node.selected = !node.selected;
-        if (node.selected) {
+        if (readonly) {
+            $("#description-header").html(node.data.label);
             $("#node-description").click();
-            //node.svgImg.attr("style", "fill:lightgrey");
         } else {
-            node.svgImg.attr("style", defaultStyle);
+            node.selected = !node.selected;
+            if (node.selected) {
+                node.svgImg.attr("style", "fill:lightgrey");
+            } else {
+                node.svgImg.attr("style", defaultStyle);
+            }
         }
     };
 

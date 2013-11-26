@@ -18,6 +18,18 @@ Technology stack: PlayFramework, Scala, HTML5, Javascript, SVG, and MongoDB.
 Javascript frameworks include vivagraph, jquery, and bootstrap
 
 
+Vision
+====
+
+
+Goals
+====
+
+
+Principles
+====
+
+
 Examples
 ====
 
