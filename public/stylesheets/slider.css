@@ -74,8 +74,7 @@ html, body, .container, .main { height: 100%;}
 	position: absolute;
 	top: 9em;
 	bottom: 3.313em;
-	width: 100%;
-	left: 0;
+	width: 95%;
 	padding: 0 1em;
 	overflow-x: hidden;
 	overflow-y: auto;

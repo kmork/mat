@@ -4099,17 +4099,15 @@ Viva.Graph.View.svgGraphics = function () {
         actualScale = 1,
     /*jshint unused: false */
         nodeBuilder = function (node) {
-            return Viva.Graph.svg("rectangle")
-                .attr("rx", 50)
-                .attr("ry", 25)
-                .attr("stroke", "black")
-                .attr("stroke-width", 3)
-                .attr("style", "fill:white");
-        },
+            return Viva.Graph.svg("rect")
+                .attr("width", 10)
+                .attr("height", 10)
+                .attr("fill", "#00a2e8");        },
 
         nodePositionCallback = function (nodeUI, pos) {
-            nodeUI.attr("cx", pos.x)
-                .attr("cy", pos.y);
+            // TODO: Remove magic 5. It should be halfo of the width or height of the node.
+            nodeUI.attr("x", pos.x - 5)
+                .attr("y", pos.y - 5);
         },
 
         linkBuilder = function (link) {
