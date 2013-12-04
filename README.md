@@ -65,3 +65,6 @@ Possible features
 - Tooltip attribute for node?
 - Configurable image (instead of ellipse) for nodes?
 - Slider to navigate in history (forward and backward between all steps)
+- Add label to links
+- Add direction to links?
+- Context sensitive Help info boxes at the start when you create your maps?

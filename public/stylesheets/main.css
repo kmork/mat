@@ -55,3 +55,12 @@ h1 {
 .topbar .btn {
     border: 0;
 }
+
+.map-error {
+    margin-top: 0px;
+    margin-right: -20px;
+    margin-bottom: 0px;
+    margin-left: 20px;
+    z-index:2;
+        position:absolute;
+}

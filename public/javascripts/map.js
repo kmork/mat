@@ -6,6 +6,10 @@ var selectedNode;
 var commands = [];
 var readonly = true;
 
+var error = function(message) {
+    $('#map').before('<div class="alert alert-error map-error"><a class="close" data-dismiss="alert">×</a><span><b>Error: </b>' + message + '</span></div>');
+};
+
 var graph = Viva.Graph.graph();
 
 var showNodeDescription = function(node, isOn) {
@@ -39,7 +43,6 @@ graphics.node(function(node) {
         if (readonly) {
             $("#description-header").html(node.data.label);
             $("#description-content").load("assets/html/" + node.data.label + ".html");
-
             $("#node-description").click();
         } else {
             node.selected = !node.selected;
@@ -138,6 +141,9 @@ var save = function(cmd) {
         url: window.location.pathname + "/save?cmdId=" + id + "&content=" + cmd,
         error: function(err) {
             console.log("Failed to save command with id: " + id + ".", err);
+            error("Failed to backup map on server. <br>" +
+                "Further changes will not be saved. <br>" +
+                "Please refresh your browser and try again.");
         }
     });
 }
