@@ -29,13 +29,39 @@ Goals
 Principles
 ====
 
+- As simple as possible
+- Easy to use
+- Quick to draw new maps
+- No need for explicit help
+- Flexible
+- Continuous feedback
+- Always provide defaults
+
 
 Examples
 ====
 
 - Molecule arrangements?
-- Development of programming languages?
+- Development of programming languages? (influences)
 - Development of various other scientific fields ? Mathematics, astronomy, physics, etc?
 - Who flirted with whom in various pulp fiction novels?
 - Relationships between the books in my bookshelf?
 - Sub-fields to master in order to become successful in software development projects?
+
+
+Possible features
+====
+
+- Ellipse size proportional to the number of links?
+- Date attribute for nodes?
+    - Rearrangement according to this date attribute?
+- Multiple links between same nodes?
+- Confluence plugin?
+- Title attribute for user generated maps?
+- Read-only url
+- Node label auto-reduced when text is larger than ellipse? (and possibly multi-line?)
+- Link (url) attribute for node?
+- Description attribute for node?
+- Tooltip attribute for node?
+- Configurable image (instead of ellipse) for nodes?
+- Slider to navigate in history (forward and backward between all steps)
