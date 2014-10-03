@@ -29,6 +29,12 @@ h1 {
     box-shadow: 0 1px 2px rgba(0,0,0,.15);
 }
 
+/* Suddenly, the svg frame in the Chrome browser got set to ony 300px * 150px. Do not know why, but this hack provides a dirty quick fix */
+svg {
+    width: 100%;
+    height: 100%;
+}
+
 .logo {
     font-family: 'Lucida Sans Typewriter', 'Lucida Console', Monaco, 'Bitstream Vera Sans Mono', monospace;
 }
