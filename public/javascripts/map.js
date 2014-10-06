@@ -193,35 +193,42 @@ var initMap = function(mapData) {
     }
 }
 
-var splitLabel = function(labelNode, text) {
-    var multiWord = text.split(" ");
-    if (multiWord.length === 2) {
-        labelNode.text('');
-        var svgLabelUpper = Viva.Graph.svg('tspan')
-            .attr('dy', '-4')
-            .attr('x', '0')
-            .text(multiWord[0]);
-        var svgLabelLower = Viva.Graph.svg('tspan')
-            .attr('dy', '19')
-            .attr('x', '0')
-            .text(multiWord[1]);
-        labelNode.append(svgLabelUpper);
-        labelNode.append(svgLabelLower);
-    } else {
-        labelNode.text(text);
-    }
-}
+
 
 var positionLabel = function(node, text) {
+    function splitLabel(labelNode, text) {
+        var wholeLabel = text.trim();
+        var multiWord = wholeLabel.split(/[\s,\/]+/);
+        if (multiWord.length > 1) {
+            labelNode.text('');
+            var svgLabelUpper = Viva.Graph.svg('tspan')
+                .attr('dy', '-4')
+                .attr('x', '0')
+                .text(wholeLabel.substr(0, wholeLabel.length - multiWord[multiWord.length - 1].length).trim());
+            var svgLabelLower = Viva.Graph.svg('tspan')
+                .attr('dy', '19')
+                .attr('x', '0')
+                .text(multiWord[multiWord.length - 1]);
+            labelNode.append(svgLabelUpper);
+            labelNode.append(svgLabelLower);
+        }
+    }
+
     var labelNode = node.svgLabel;
     labelNode.text(text);
     var containerWidth = node.svgImg.getBBox().width;
     var labelWidth = labelNode.getComputedTextLength();
-    if (labelWidth > containerWidth) {
+
+    // First we try to split the label into two parts
+    if (labelWidth + 1.5 > containerWidth) {
         splitLabel(labelNode, text);
     }
-    //labelNode.attr('transform', 'scale(0.7, 0.7)')
 
+    // If that was not enough or could not be done then decrease font size once
+    var scale = 0.8;
+    if (labelNode.getComputedTextLength() > containerWidth) {
+        labelNode.attr('transform', 'scale(' + scale + ", " + scale + ')');
+    }
 }
 
 
