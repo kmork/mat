@@ -25,6 +25,8 @@ Vision
 Goals
 ====
 
+Better than paper, by being simple, fast, and flexible
+
 
 Principles
 ====

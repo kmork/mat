@@ -1,6 +1,7 @@
 var defaultStyle = "fill:white";
 var selectedStyle = "fill:blanchedalmond";
 var svgColor = "black";
+var nodeTextStyle = "text-anchor: middle";
 var keyMode;
 var selectedNode;
 var commands = [];
@@ -34,7 +35,7 @@ graphics.node(function(node) {
         .attr("style", defaultStyle);
     node.svgLabel = Viva.Graph.svg('text')
         .attr('dy', '5px')
-        .attr('style', 'text-anchor: middle')
+        .attr('style', nodeTextStyle)
         .text(node.data.label);
     ui.append(node.svgImg);
     ui.append(node.svgLabel);
@@ -172,7 +173,7 @@ var initMap = function(mapData) {
                 case "sl":
                     selectedNode = graph.getNode(cmd[1]);
                     selectedNode.data.label = mapData[key].command.substring(cmd[0].length + 1 + cmd[1].length + 1);
-                    selectedNode.svgLabel.text(selectedNode.data.label);
+                    positionLabel(selectedNode, selectedNode.data.label);
                     selectedNode = null;
                     keyMode = false;
                     break;
@@ -192,6 +193,38 @@ var initMap = function(mapData) {
     }
 }
 
+var splitLabel = function(labelNode, text) {
+    var multiWord = text.split(" ");
+    if (multiWord.length === 2) {
+        labelNode.text('');
+        var svgLabelUpper = Viva.Graph.svg('tspan')
+            .attr('dy', '-4')
+            .attr('x', '0')
+            .text(multiWord[0]);
+        var svgLabelLower = Viva.Graph.svg('tspan')
+            .attr('dy', '19')
+            .attr('x', '0')
+            .text(multiWord[1]);
+        labelNode.append(svgLabelUpper);
+        labelNode.append(svgLabelLower);
+    } else {
+        labelNode.text(text);
+    }
+}
+
+var positionLabel = function(node, text) {
+    var labelNode = node.svgLabel;
+    labelNode.text(text);
+    var containerWidth = node.svgImg.getBBox().width;
+    var labelWidth = labelNode.getComputedTextLength();
+    if (labelWidth > containerWidth) {
+        splitLabel(labelNode, text);
+    }
+    //labelNode.attr('transform', 'scale(0.7, 0.7)')
+
+}
+
+
 $(document).keypress(function(e) {
     if (keyMode) {
         if (selectedNode.data.label === '_') {
@@ -199,7 +232,7 @@ $(document).keypress(function(e) {
         }
         selectedNode.data.label += String.fromCharCode(e.which);
         if (e.which === 13) { // Enter
-            selectedNode.svgLabel.text(selectedNode.data.label);
+            positionLabel(selectedNode, selectedNode.data.label);
             save("sl," + selectedNode.id + "," + selectedNode.data.label);
             selectedNode.svgImg.attr("stroke", "black");
             selectedNode = null;
