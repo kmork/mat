@@ -6,6 +6,7 @@ var keyMode;
 var selectedNode;
 var commands = [];
 var readonly = true;
+var nodeCount = 0;
 
 var error = function(message) {
     $('#map').before('<div class="alert alert-error map-error"><a class="close" data-dismiss="alert">×</a><span><b>Error: </b>' + message + '</span></div>');
@@ -93,7 +94,8 @@ var selectedNodes = function() {
 };
 
 var addNode = function() {
-    selectedNode = graph.addNode('n' + graph.getNodesCount(), {label:'_', description:'Press "n" to create another concept'});
+    nodeCount += 1;
+    selectedNode = graph.addNode('n' + nodeCount, {label: '_', description: 'Press "n" to create another concept'});
     save("an," + selectedNode.id);
 };
 
@@ -165,6 +167,7 @@ var initMap = function(mapData) {
             var cmd = mapData[key].command.split(',');
             switch (cmd[0]) {
                 case "an":
+                    nodeCount += 1;
                     graph.addNode(cmd[1], {label:'_', description:''});
                     break;
                 case "al":
