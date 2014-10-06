@@ -96,6 +96,7 @@ var selectedNodes = function() {
 var addNode = function() {
     nodeCount += 1;
     selectedNode = graph.addNode('n' + nodeCount, {label: '_', description: 'Press "n" to create another concept'});
+    selectedNode.data.isPinned = true;
     save("an," + selectedNode.id);
 };
 
@@ -113,7 +114,9 @@ var addLink = function() {
         graph.addLink(s[0], s[1]);
         save("al," + s[0] + "," + s[1]);
         graph.getNode(s[0]).toggleNodeSelected();
+        graph.getNode(s[0]).data.isPinned = false;
         graph.getNode(s[1]).toggleNodeSelected();
+        graph.getNode(s[1]).data.isPinned = false;
     }
 };
 
@@ -137,6 +140,19 @@ var removeNode = function() {
         save("rn," + nodeId);
     });
 }
+
+var pinnSelectedNodes = function() {
+    selectedNodes().forEach(function(nodeId) {
+        graph.getNode(nodeId).data.isPinned = true;
+    });
+}
+
+var togglePinningOfAllNodes = function() {
+    graph.forEachNode(function(node) {
+        node.data.isPinned = true;
+    });
+}
+
 
 var save = function(cmd) {
     var id = commands.push(cmd);
@@ -264,6 +280,8 @@ $(document).keypress(function(e) {
             removeLink();
         } else if (e.which === 100) { // d
             removeNode();
+        } else if (e.which === 112) { // p
+            togglePinningOfAllNodes();
         }
     }
 });
