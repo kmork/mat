@@ -68,9 +68,9 @@ graphics.node(function(node) {
 
     return ui;
 }).placeNode(function(nodeUI, pos) {
-        nodeUI.attr('transform',
-            'translate(' + pos.x + ',' + pos.y + ')');
-    });
+    nodeUI.attr('transform',
+        'translate(' + pos.x + ',' + pos.y + ')');
+});
 
 var displayMap = function(domElement) {
     var renderer = Viva.Graph.View.renderer(graph,
@@ -100,13 +100,22 @@ var addNode = function() {
     save("an," + selectedNode.id);
 };
 
-var labelNode = function() {
+var labelNodeStart = function() {
     //svgColor = "blue";
     if (!selectedNode) {
         selectedNode = graph.getNode(selectedNodes()[0]);
     }
     keyMode = true;
 };
+
+var labelNodeFinish = function () {
+    positionLabel(selectedNode, selectedNode.data.label);
+    save("sl," + selectedNode.id + "," + selectedNode.data.label);
+    selectedNode.svgImg.attr("stroke", "black");
+    selectedNode = null;
+    keyMode = false;
+};
+
 
 var addLink = function() {
     var s = selectedNodes();
@@ -126,7 +135,7 @@ var removeLink = function() {
         // intersection of the links associated with the two nodes should yield the one
         // we are looking for (only one link is currently allowed between two nodes).
         graph.removeLink(graph.getLinks(s[0]).filter(function(n) {
-            return graph.getLinks(s[1]).indexOf(n) != -1
+            return graph.getLinks(s[1]).indexOf(n) !== -1;
         })[0]);
         save("rl," + s[0] + "," + s[1]);
         graph.getNode(s[0]).toggleNodeSelected();
@@ -258,23 +267,19 @@ $(document).keypress(function(e) {
         }
         selectedNode.data.label += String.fromCharCode(e.which);
         if (e.which === 13) { // Enter
-            positionLabel(selectedNode, selectedNode.data.label);
-            save("sl," + selectedNode.id + "," + selectedNode.data.label);
-            selectedNode.svgImg.attr("stroke", "black");
-            selectedNode = null;
-            keyMode = false;
+            labelNodeFinish();
         } else {
             selectedNode.svgLabel.text(selectedNode.data.label + '_');
         }
     } else {
         if (e.which === 110) { // n
             addNode();
-            labelNode();
+            labelNodeStart();
         } else if (e.which === 108) { // l
             addLink();
         } else if (e.which === 116) { // t
             if (selectedNodes().length === 1) {
-                labelNode();
+                labelNodeStart();
             }
         } else if (e.which === 117) { // u
             removeLink();
