@@ -7,6 +7,7 @@ var selectedNode;
 var commands = [];
 var readonly = true;
 var nodeCount = 0;
+var pinnedAllNodes = false;
 
 var error = function(message) {
     $('#map').before('<div class="alert alert-error map-error"><a class="close" data-dismiss="alert">×</a><span><b>Error: </b>' + message + '</span></div>');
@@ -157,8 +158,9 @@ var pinnSelectedNodes = function() {
 }
 
 var togglePinningOfAllNodes = function() {
+    pinnedAllNodes = !pinnedAllNodes;
     graph.forEachNode(function(node) {
-        node.data.isPinned = true;
+        node.data.isPinned = pinnedAllNodes;
     });
 }
 
