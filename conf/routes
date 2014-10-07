@@ -20,3 +20,7 @@ GET        /maps/:mapId/save        controllers.Application.saveMap(mapId, cmdId
 # Load map data
 GET        /maps/:mapId/load        controllers.Application.loadMap(mapId)
 
+# Get URL to readonly version of map
+GET        /maps/:mapId/readonly    controllers.Application.getReadOnlyURL(mapId)
+
+

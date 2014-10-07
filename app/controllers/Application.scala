@@ -11,7 +11,8 @@ object Application extends Controller {
 
   val uri = MongoClientURI(Play.configuration.getString("mongodb.uri").get)
   val mongoClient = MongoClient(uri)
-  val coll = mongoClient("matmaps")("map")
+  val mapColl = mongoClient("matmaps")("map")
+  val roColl = mongoClient("matmaps")("ro_map")
 
   def index = Action {
     Ok(views.html.index())
@@ -23,13 +24,22 @@ object Application extends Controller {
     do {
       mapId = RandomString.createRandomString(16)
       mongoDoc = MongoDBObject("id" -> mapId, "eventId" -> 1.toLong, "event" -> "map_created")
-    } while (coll.findOne(mongoDoc) isDefined)
-    coll.insert( mongoDoc )
+    } while (mapColl.findOne(mongoDoc) isDefined)
+    mapColl.insert( mongoDoc )
+
+    var readOnlyMongoDoc : MongoDBObject = null
+    var readOnlyMapId : String = null
+    do {
+      readOnlyMapId = RandomString.createRandomString(16)
+      readOnlyMongoDoc = MongoDBObject("id" -> readOnlyMapId, "reference" -> mapId)
+    } while (roColl.findOne(mongoDoc) isDefined)
+    roColl.insert( readOnlyMongoDoc )
+
     Redirect(routes.Application.getMap(mapId))
   }
 
   def getMap(mapId: String) = Action {
-    coll.findOne(MongoDBObject("id" -> mapId)) match {
+    mapColl.findOne(MongoDBObject("id" -> mapId)) match {
       case Some(map) =>
         if (map.get("content") != null) {
           Ok(views.html.loadMap())
@@ -37,11 +47,11 @@ object Application extends Controller {
           Ok(views.html.newMap())
         }
       case None => NotFound(views.html.notFound())
-    };
+    }
   }
 
   def saveMap(mapId: String, cmdId: String, cmd: String, content: String) = Action {
-    coll.insert(
+    mapColl.insert(
       MongoDBObject("id" -> mapId, "eventId" -> (cmdId.toLong + 1), "event" -> cmd, "content" -> content)
     )
     Ok
@@ -51,7 +61,14 @@ object Application extends Controller {
     val query = MongoDBObject("id" -> mapId) ++ ("content" $exists true )
     val fields = MongoDBObject("_id" -> false, "eventId" -> true, "event" -> true, "content" -> true)
     val sort = MongoDBObject("eventId" -> 1)
-    val result = coll.find(query, fields).sort(sort).toList
+    val result = mapColl.find(query, fields).sort(sort).toList
     Ok(Json.parse(com.mongodb.util.JSON.serialize(result)))
+  }
+
+  def getReadOnlyURL(mapId: String) = Action {
+    roColl.findOne(MongoDBObject("reference" -> mapId)) match {
+      case Some(map) => Ok(map.get("id").toString())
+      case None => NotFound
+    }
   }
 }
