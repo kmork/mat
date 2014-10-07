@@ -15,7 +15,7 @@ GET        /new                     controllers.Application.newMap
 GET        /maps/:mapId             controllers.Application.getMap(mapId)
 
 # Save latest map data (should this be PUT? need a timestamp in that case)
-GET        /maps/:mapId/save        controllers.Application.saveMap(mapId, cmdId, content)
+GET        /maps/:mapId/save        controllers.Application.saveMap(mapId, cmdId, cmd, content)
 
 # Load map data
 GET        /maps/:mapId/load        controllers.Application.loadMap(mapId)

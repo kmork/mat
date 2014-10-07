@@ -18,11 +18,11 @@ object Application extends Controller {
   }
 
   def newMap = Action {
-    var mongoDoc : MongoDBObject = null;
+    var mongoDoc : MongoDBObject = null
     var mapId : String = null
     do {
       mapId = RandomString.createRandomString(16)
-      mongoDoc = MongoDBObject("id" -> mapId)
+      mongoDoc = MongoDBObject("id" -> mapId, "eventId" -> 1.toLong, "event" -> "map_created")
     } while (coll.findOne(mongoDoc) isDefined)
     coll.insert( mongoDoc )
     Redirect(routes.Application.getMap(mapId))
@@ -40,16 +40,18 @@ object Application extends Controller {
     };
   }
 
-  def saveMap(mapId: String, cmdId: String, content: String) = Action {
-    val updateQ = $push ("content" -> MongoDBObject("command" -> content))
-    coll.update(MongoDBObject("id" -> mapId), updateQ)
+  def saveMap(mapId: String, cmdId: String, cmd: String, content: String) = Action {
+    coll.insert(
+      MongoDBObject("id" -> mapId, "eventId" -> (cmdId.toLong + 1), "event" -> cmd, "content" -> content)
+    )
     Ok
   }
 
   def loadMap(mapId: String) = Action {
-    coll.findOne(MongoDBObject("id" -> mapId) ++ ("content" $exists true )) match {
-      case Some(map) => Ok(Json.parse(map("content").toString()))
-      case None => NotFound
-    };
+    val query = MongoDBObject("id" -> mapId) ++ ("content" $exists true )
+    val fields = MongoDBObject("_id" -> false, "eventId" -> true, "event" -> true, "content" -> true)
+    val sort = MongoDBObject("eventId" -> 1)
+    val result = coll.find(query, fields).sort(sort).toList
+    Ok(Json.parse(com.mongodb.util.JSON.serialize(result)))
   }
 }

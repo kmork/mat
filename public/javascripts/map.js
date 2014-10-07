@@ -98,7 +98,7 @@ var addNode = function() {
     nodeCount += 1;
     selectedNode = graph.addNode('n' + nodeCount, {label: '_', description: 'Press "n" to create another concept'});
     selectedNode.data.isPinned = true;
-    save("an," + selectedNode.id);
+    save("an", selectedNode.id);
 };
 
 var labelNodeStart = function() {
@@ -111,7 +111,7 @@ var labelNodeStart = function() {
 
 var labelNodeFinish = function () {
     positionLabel(selectedNode, selectedNode.data.label);
-    save("sl," + selectedNode.id + "," + selectedNode.data.label);
+    save("sl", selectedNode.id + "," + selectedNode.data.label);
     selectedNode.svgImg.attr("stroke", "black");
     selectedNode = null;
     keyMode = false;
@@ -122,7 +122,7 @@ var addLink = function() {
     var s = selectedNodes();
     if (s.length === 2) {
         graph.addLink(s[0], s[1]);
-        save("al," + s[0] + "," + s[1]);
+        save("al", s[0] + "," + s[1]);
         graph.getNode(s[0]).toggleNodeSelected();
         graph.getNode(s[0]).data.isPinned = false;
         graph.getNode(s[1]).toggleNodeSelected();
@@ -135,10 +135,10 @@ var removeLink = function() {
     if (s.length === 2) {
         // intersection of the links associated with the two nodes should yield the one
         // we are looking for (only one link is currently allowed between two nodes).
-        graph.removeLink(graph.getLinks(s[0]).filter(function(n) {
+        graph.removeLink(graph.getLinks(s[0]).filter(function (n) {
             return graph.getLinks(s[1]).indexOf(n) !== -1;
         })[0]);
-        save("rl," + s[0] + "," + s[1]);
+        save("rl", s[0] + "," + s[1]);
         graph.getNode(s[0]).toggleNodeSelected();
         graph.getNode(s[1]).toggleNodeSelected();
     }
@@ -147,7 +147,7 @@ var removeLink = function() {
 var removeNode = function() {
     selectedNodes().forEach(function(nodeId) {
         graph.removeNode(nodeId);
-        save("rn," + nodeId);
+        save("rn", nodeId);
     });
 }
 
@@ -165,10 +165,10 @@ var togglePinningOfAllNodes = function() {
 }
 
 
-var save = function(cmd) {
+var save = function(cmd, content) {
     var id = commands.push(cmd);
     $.ajax({
-        url: window.location.pathname + "/save?cmdId=" + id + "&content=" + cmd,
+        url: window.location.pathname + "/save?cmdId=" + id + "&cmd=" + cmd + "&content=" + content,
         error: function(err) {
             console.log("Failed to save command with id: " + id + ".", err);
             error("Failed to backup map on server. <br>" +
@@ -191,30 +191,30 @@ var load = function() {
 var initMap = function(mapData) {
     for (var key in mapData) {
         if (mapData.hasOwnProperty(key)) {
-            var cmd = mapData[key].command.split(',');
-            switch (cmd[0]) {
+            var cmd = mapData[key].event;
+            var content = mapData[key].content.split(',');
+            switch (cmd) {
                 case "an":
                     nodeCount += 1;
-                    graph.addNode(cmd[1], {label:'_', description:''});
+                    graph.addNode(content[0], {label:'_', description:''});
                     break;
                 case "al":
-                    graph.addLink(cmd[1], cmd[2]);
+                    graph.addLink(content[0], content[1]);
                     break;
                 case "sl":
-                    selectedNode = graph.getNode(cmd[1]);
-                    selectedNode.data.label = mapData[key].command.substring(cmd[0].length + 1 + cmd[1].length + 1);
+                    selectedNode = graph.getNode(content[0]);
+                    selectedNode.data.label = mapData[key].content.substring(content[0].length + 1);
                     positionLabel(selectedNode, selectedNode.data.label);
                     selectedNode = null;
                     keyMode = false;
                     break;
                 case "rl":
-                    s =
-                    graph.removeLink(graph.getLinks(cmd[1]).filter(function(n) {
-                        return graph.getLinks(cmd[2]).indexOf(n) != -1
+                    graph.removeLink(graph.getLinks(content[0]).filter(function(n) {
+                        return graph.getLinks(content[1]).indexOf(n) != -1
                     })[0]);
                     break;
                 case "rn":
-                    graph.removeNode(cmd[1]);
+                    graph.removeNode(content[0]);
                     break;
                 default:
                     break;
