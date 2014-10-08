@@ -134,8 +134,6 @@ $(document).keypress(function(e) {
             removeLink();
         } else if (e.which === 100) { // d
             removeNode();
-        } else if (e.which === 112) { // p
-            togglePinningOfAllNodes();
         }
     }
 });
