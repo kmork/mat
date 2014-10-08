@@ -39,13 +39,8 @@ object Application extends Controller {
   }
 
   def getMap(mapId: String) = Action {
-    mapColl.findOne(MongoDBObject("id" -> mapId)) match {
-      case Some(map) =>
-        if (map.get("content") != null) {
-          Ok(views.html.loadMap())
-        } else {
-          Ok(views.html.newMap())
-        }
+    roColl.findOne(MongoDBObject("reference" -> mapId)) match {
+      case Some(map) => Ok(views.html.loadMap(map.get("id").toString()))
       case None => NotFound(views.html.notFound())
     }
   }

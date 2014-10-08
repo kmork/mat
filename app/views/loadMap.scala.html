@@ -1,8 +1,14 @@
-@main("silly-maps") {
+@(refMapId: String)
+
+@main("silly-maps", urlFooter(refMapId)) {
     <script>
         $(document).ready(function(){
-            load();
             readonly = false;
+            load();
+            if (nodeCount === 0) {
+                addNode();
+                labelNodeStart();
+            }
             displayMap("map");
         });
     </script>
