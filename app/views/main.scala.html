@@ -1,4 +1,4 @@
-@(title: String, footer: Html = Html("&copy; Knut Mork 2013-2014"))(content: Html)
+@(title: String, footer: Html = Html("&copy; Knut Mork 2013-2014"), javascripts: Html = Html(""))(content: Html)
 
 <!DOCTYPE html>
 <html lang="en">
@@ -27,6 +27,7 @@
         <script src="@routes.Assets.at("javascripts/lib/jquery.cbpContentSlider.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/google-analytics.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/map.js")" type="text/javascript"></script>
+        @javascripts
     </head>
     <body>
         <div class="container">

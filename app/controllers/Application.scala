@@ -66,4 +66,18 @@ object Application extends Controller {
       case None => NotFound
     }
   }
+
+  def getReadOnlyMap(mapId: String) = Action {
+    roColl.findOne(MongoDBObject("id" -> mapId)) match {
+      case Some(map) => Ok(views.html.loadReadOnlyMap())
+      case None => NotFound(views.html.notFound())
+    }
+  }
+
+  def loadReadOnlyMap(mapId: String) = Action {
+    roColl.findOne(MongoDBObject("id" -> mapId)) match {
+      case Some(map) => Redirect(routes.Application.loadMap(map.get("reference").toString()))
+      case None => NotFound(views.html.notFound())
+    }
+  }
 }

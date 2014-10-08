@@ -11,16 +11,21 @@ GET        /assets/*file            controllers.Assets.at(path="/public", file)
 # New map page (should this be POST?)
 GET        /new                     controllers.Application.newMap
 
-# Specific (read or write) server-stored map
-GET        /maps/:mapId             controllers.Application.getMap(mapId)
+# Specific writable server-stored map
+GET        /editmaps/:mapId             controllers.Application.getMap(mapId)
 
 # Save latest map data (should this be PUT? need a timestamp in that case)
-GET        /maps/:mapId/save        controllers.Application.saveMap(mapId, cmdId, cmd, content)
+GET        /editmaps/:mapId/save        controllers.Application.saveMap(mapId, cmdId, cmd, content)
 
-# Load map data
-GET        /maps/:mapId/load        controllers.Application.loadMap(mapId)
+# Load writable map data
+GET        /editmaps/:mapId/load        controllers.Application.loadMap(mapId)
 
 # Get URL to readonly version of map
-GET        /maps/:mapId/readonly    controllers.Application.getReadOnlyURL(mapId)
+GET        /editmaps/:mapId/readonly    controllers.Application.getReadOnlyURL(mapId)
 
+# Specific readable server-stored map
+GET        /maps/:mapId             controllers.Application.getReadOnlyMap(mapId)
+
+# Load readable map data
+GET        /maps/:mapId/load        controllers.Application.loadReadOnlyMap(mapId)
 

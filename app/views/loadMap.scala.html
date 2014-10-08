@@ -1,15 +1,15 @@
 @(refMapId: String)
 
-@main("silly-maps", urlFooter(refMapId)) {
+@main("silly-maps", urlFooter(refMapId), editMapsImport()) {
     <script>
         $(document).ready(function(){
-            readonly = false;
-            load();
-            if (nodeCount === 0) {
-                addNode();
-                labelNodeStart();
-            }
             displayMap("map");
+            load(function () {
+                if (nodeCount === 0) {
+                    addNode();
+                    labelNodeStart();
+                }
+            });
         });
     </script>
 }
