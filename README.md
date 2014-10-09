@@ -43,6 +43,7 @@ Principles
 Examples
 ====
 
+- Domain Driven Design concepts
 - Molecule arrangements?
 - Development of programming languages? (influences)
 - Development of various other scientific fields ? Mathematics, astronomy, physics, etc?
@@ -60,8 +61,8 @@ Possible features
 - Multiple links between same nodes?
 - Confluence plugin?
 - Title attribute for user generated maps?
-- Read-only url
-- Node label auto-reduced when text is larger than ellipse? (and possibly multi-line?)
+- * Read-only url
+- * Node label auto-reduced when text is larger than ellipse? (and possibly multi-line?)
 - Link (url) attribute for node?
 - Description attribute for node?
 - Tooltip attribute for node?

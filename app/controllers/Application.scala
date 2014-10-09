@@ -53,11 +53,7 @@ object Application extends Controller {
   }
 
   def loadMap(mapId: String) = Action {
-    val query = MongoDBObject("id" -> mapId) ++ ("content" $exists true )
-    val fields = MongoDBObject("_id" -> false, "eventId" -> true, "event" -> true, "content" -> true)
-    val sort = MongoDBObject("eventId" -> 1)
-    val result = mapColl.find(query, fields).sort(sort).toList
-    Ok(Json.parse(com.mongodb.util.JSON.serialize(result)))
+    Ok(Json.parse(findAllEventsForMap(mapId)))
   }
 
   def getReadOnlyURL(mapId: String) = Action {
@@ -76,8 +72,17 @@ object Application extends Controller {
 
   def loadReadOnlyMap(mapId: String) = Action {
     roColl.findOne(MongoDBObject("id" -> mapId)) match {
-      case Some(map) => Redirect(routes.Application.loadMap(map.get("reference").toString()))
+      case Some(map) => Ok(Json.parse(findAllEventsForMap(map.get("reference").toString())))
       case None => NotFound(views.html.notFound())
     }
+  }
+
+  // Helper function, not an action
+  def findAllEventsForMap(mapId: String) : String = {
+    val query = MongoDBObject("id" -> mapId) ++ ("content" $exists true )
+    val fields = MongoDBObject("_id" -> false, "eventId" -> true, "event" -> true, "content" -> true)
+    val sort = MongoDBObject("eventId" -> 1)
+    val result = mapColl.find(query, fields).sort(sort).toList
+    com.mongodb.util.JSON.serialize(result)
   }
 }
