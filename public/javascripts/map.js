@@ -98,7 +98,7 @@ var togglePinningOfAllNodes = function() {
 
 var load = function(successCallback) {
     $.ajax({
-        url: window.location.pathname + "/load",
+        url: window.location.pathname + "/actions",
         success: function(result) {
             initMap(result);
             if (successCallback != null) successCallback();

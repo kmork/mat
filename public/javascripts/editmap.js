@@ -99,7 +99,10 @@ var removeNode = function() {
 var save = function(cmd, content) {
     var id = commands.push(cmd);
     $.ajax({
-        url: window.location.pathname + "/save?cmdId=" + id + "&cmd=" + cmd + "&content=" + content,
+        url: window.location.pathname + "/actions/" + id,
+        type: "PUT",
+        contentType: "application/json",
+        data: JSON.stringify({"cmdType": cmd, "content": content}),
         error: function(err) {
             console.log("Failed to save command with id: " + id + ".", err);
             error("Failed to backup map on server. <br>" +

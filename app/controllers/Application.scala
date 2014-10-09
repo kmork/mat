@@ -4,10 +4,19 @@ import play.api.mvc._
 import com.mongodb.casbah.Imports._
 import play.api.Play
 import play.api.Play.current
-import play.api.libs.json.Json
+import play.api.libs.json._
+import play.api.libs.functional.syntax._
 import scala.Some
 
 object Application extends Controller {
+
+  case class Command (cmdType: String, content: String)
+
+  implicit val commandReads: Reads[Command] = (
+    (JsPath \ "cmdType").read[String] and
+      (JsPath \ "content").read[String]
+    )(Command.apply _)
+
 
   val uri = MongoClientURI(Play.configuration.getString("mongodb.uri").get)
   val mongoClient = MongoClient(uri)
@@ -45,11 +54,19 @@ object Application extends Controller {
     }
   }
 
-  def saveMap(mapId: String, cmdId: String, cmd: String, content: String) = Action {
-    mapColl.insert(
-      MongoDBObject("id" -> mapId, "eventId" -> (cmdId.toLong + 1), "event" -> cmd, "content" -> content)
+  def saveMap(mapId: String, cmdId: String) = Action(parse.json) { request =>
+    val cmdResult = request.body.validate[Command]
+    cmdResult.fold(
+      errors => {
+        BadRequest(Json.obj("status" ->"KO", "message" -> JsError.toFlatJson(errors)))
+      },
+      cmd => {
+        mapColl.insert(
+          MongoDBObject("id" -> mapId, "eventId" -> (cmdId.toLong + 1), "event" -> cmd.cmdType, "content" -> cmd.content)
+        )
+        Ok
+      }
     )
-    Ok
   }
 
   def loadMap(mapId: String) = Action {

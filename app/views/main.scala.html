@@ -35,7 +35,12 @@
             <div class="content">
                 <div class="page-header">
                     <h1 class="span logo" style="margin-left: 0"><a href="/">silly-maps </a><span class="h1 small" style="color: #999999;font-size: 24.5px">beta</span></h1>
-                    <h1>&nbsp;<a class="btn btn-primary pull-right" style="margin-top: 0.5em;font-weight: normal;" href="/new"><i class="icon-pencil icon-white"></i> New map</a></h1>
+                    <h1><form method="post">
+                        <button formaction="/editmaps" type="submit" class="btn btn-primary pull-right">
+                            <i class="icon-pencil icon-white"></i> New map</a>
+                        </button>
+                    </form>
+                    </h1>
                 </div>
                 <div class="row">
                     <div class="span10 cbp-contentslider" id="map" >

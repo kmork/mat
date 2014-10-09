@@ -3,29 +3,29 @@
 # ~~~~
 
 # Home page
-GET        /                        controllers.Application.index
+GET        /                                            controllers.Application.index
 
 # Map static resources from the /public folder to the /assets URL path
-GET        /assets/*file            controllers.Assets.at(path="/public", file)
+GET        /assets/*file                                controllers.Assets.at(path="/public", file)
 
-# New map page (should this be POST?)
-GET        /new                     controllers.Application.newMap
+# New map page
+POST        /editmaps                                   controllers.Application.newMap
 
-# Specific writable server-stored map
-GET        /editmaps/:mapId             controllers.Application.getMap(mapId)
+# Retrieve writable server-stored map
+GET        /editmaps/:mapId                             controllers.Application.getMap(mapId)
 
-# Save latest map data (should this be PUT? need a timestamp in that case)
-GET        /editmaps/:mapId/save        controllers.Application.saveMap(mapId, cmdId, cmd, content)
+# Save latest map action
+PUT        /editmaps/:mapId/actions/:actionId           controllers.Application.saveMap(mapId, actionId)
 
 # Load writable map data
-GET        /editmaps/:mapId/load        controllers.Application.loadMap(mapId)
+GET        /editmaps/:mapId/actions                     controllers.Application.loadMap(mapId)
 
 # Get URL to readonly version of map
-GET        /editmaps/:mapId/readonly    controllers.Application.getReadOnlyURL(mapId)
+GET        /editmaps/:mapId/readonly                    controllers.Application.getReadOnlyURL(mapId)
 
-# Specific readable server-stored map
-GET        /maps/:mapId             controllers.Application.getReadOnlyMap(mapId)
+# Retrieve readable server-stored map
+GET        /maps/:mapId                                 controllers.Application.getReadOnlyMap(mapId)
 
 # Load readable map data
-GET        /maps/:mapId/load        controllers.Application.loadReadOnlyMap(mapId)
+GET        /maps/:mapId/actions                         controllers.Application.loadReadOnlyMap(mapId)
 
