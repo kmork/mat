@@ -58,8 +58,46 @@ graphics.node(function(node) {
         showNodeDescription(node, false);
     });
 
+    node.positionLabel = function() {
+        function splitLabel(labelNode, text) {
+            var wholeLabel = text.trim();
+            var multiWord = wholeLabel.split(/[\s,\/]+/);
+            if (multiWord.length > 1) {
+                labelNode.text('');
+                var svgLabelUpper = Viva.Graph.svg('tspan')
+                    .attr('dy', '-4')
+                    .attr('x', '0')
+                    .text(wholeLabel.substr(0, wholeLabel.length - multiWord[multiWord.length - 1].length).trim());
+                var svgLabelLower = Viva.Graph.svg('tspan')
+                    .attr('dy', '19')
+                    .attr('x', '0')
+                    .text(multiWord[multiWord.length - 1]);
+                labelNode.append(svgLabelUpper);
+                labelNode.append(svgLabelLower);
+            }
+        }
+
+        var labelNode = node.svgLabel;
+        labelNode.text(node.data.label);
+        var containerWidth = node.svgImg.getBBox().width;
+        var labelWidth = labelNode.getComputedTextLength();
+
+        // First we try to split the label into two parts
+        if (labelWidth + 1.5 > containerWidth) {
+            splitLabel(labelNode, node.data.label);
+        }
+
+        // If that was not enough or could not be done then decrease font size once
+        var scale = 0.8;
+        if (labelNode.getComputedTextLength() > containerWidth) {
+            labelNode.attr('transform', 'scale(' + scale + ", " + scale + ')');
+        }
+    }
+
     return ui;
-}).placeNode(function(nodeUI, pos) {
+});
+
+graphics.placeNode(function(nodeUI, pos) {
     nodeUI.attr('transform',
         'translate(' + pos.x + ',' + pos.y + ')');
 });
@@ -180,7 +218,7 @@ var initMap = function(mapData) {
                 case "sl":
                     selectedNode = graph.getNode(content[0]);
                     selectedNode.data.label = mapData[key].content.substring(content[0].length + 1);
-                    positionLabel(selectedNode, selectedNode.data.label);
+                    selectedNode.positionLabel();
                     selectedNode = null;
                     break;
                 case "rl":
@@ -195,42 +233,6 @@ var initMap = function(mapData) {
                     break;
             }
         }
-    }
-}
-
-var positionLabel = function(node, text) {
-    function splitLabel(labelNode, text) {
-        var wholeLabel = text.trim();
-        var multiWord = wholeLabel.split(/[\s,\/]+/);
-        if (multiWord.length > 1) {
-            labelNode.text('');
-            var svgLabelUpper = Viva.Graph.svg('tspan')
-                .attr('dy', '-4')
-                .attr('x', '0')
-                .text(wholeLabel.substr(0, wholeLabel.length - multiWord[multiWord.length - 1].length).trim());
-            var svgLabelLower = Viva.Graph.svg('tspan')
-                .attr('dy', '19')
-                .attr('x', '0')
-                .text(multiWord[multiWord.length - 1]);
-            labelNode.append(svgLabelUpper);
-            labelNode.append(svgLabelLower);
-        }
-    }
-
-    var labelNode = node.svgLabel;
-    labelNode.text(text);
-    var containerWidth = node.svgImg.getBBox().width;
-    var labelWidth = labelNode.getComputedTextLength();
-
-    // First we try to split the label into two parts
-    if (labelWidth + 1.5 > containerWidth) {
-        splitLabel(labelNode, text);
-    }
-
-    // If that was not enough or could not be done then decrease font size once
-    var scale = 0.8;
-    if (labelNode.getComputedTextLength() > containerWidth) {
-        labelNode.attr('transform', 'scale(' + scale + ", " + scale + ')');
     }
 }
 
