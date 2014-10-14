@@ -22,10 +22,10 @@
             graph.addNode('examples', {label: 'examples', description: 'Various examples of concept maps'});
             graph.addNode('feedback', {label: 'feedback', description: 'All feedback appreciated!'});
             graph.addNode('help', {label: 'help', description: 'Explains how to create your own maps'});
-            graph.addLink('silly-maps', 'about');
-            graph.addLink('silly-maps', 'examples');
-            graph.addLink('silly-maps', 'feedback');
-            graph.addLink('silly-maps', 'help');
+            graph.addLink('silly-maps', 'about', {direction: 0});
+            graph.addLink('silly-maps', 'examples', {direction: 0});
+            graph.addLink('silly-maps', 'feedback', {direction: 0});
+            graph.addLink('silly-maps', 'help', {direction: 0});
             };
 
         $(document).ready(function(){
