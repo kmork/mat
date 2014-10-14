@@ -111,27 +111,27 @@ var displayMap = function(domElement) {
     renderer.run();
 
     // Marker should be defined only once in <defs> child element of root <svg> element:
+    // Svg element does not exists until renderer.run()
+    addRootElements();
+};
+
+var addRootElements = function() {
+    var createMarker = function(id) {
+        return Viva.Graph.svg('marker')
+            .attr('id', id)
+            .attr('viewBox', "0 0 10 10")
+            .attr('refX', "10")
+            .attr('refY', "5")
+            .attr('markerUnits', "strokeWidth")
+            .attr('markerWidth', "10")
+            .attr('markerHeight', "5")
+            .attr('orient', "auto");
+    };
+
     var defs = graphics.getSvgRoot().append('defs');
-    defs.append(markerTriangle);
-    defs.append(markerLine);
-};
-
-var createMarker = function(id) {
-    return Viva.Graph.svg('marker')
-        .attr('id', id)
-        .attr('viewBox', "0 0 10 10")
-        .attr('refX', "10")
-        .attr('refY', "5")
-        .attr('markerUnits', "strokeWidth")
-        .attr('markerWidth', "10")
-        .attr('markerHeight', "5")
-        .attr('orient', "auto");
-};
-
-var markerTriangle = createMarker('Triangle');
-markerTriangle.append('path').attr('d', 'M 0 0 L 10 5 L 0 10 z');
-var markerLine = createMarker('Line');
-markerLine.append('path').attr('d', 'M 0 0 L 10 5');
+    defs.append(createMarker('Triangle')).append('path').attr('d', 'M 0 0 L 10 5 L 0 10 z');
+    defs.append(createMarker('Line')).append('path').attr('d', 'M 0 0 L 10 5');
+}
 
 graphics.link(function(link){
     var marker = 'url(#Triangle)';
@@ -142,7 +142,9 @@ graphics.link(function(link){
         .attr('stroke', 'black')
         .attr('stroke-width', 2)
         .attr('marker-end', marker);
-}).placeLink(function(linkUI, fromPos, toPos) {
+});
+
+graphics.placeLink(function(linkUI, fromPos, toPos) {
     //  "Links should start/stop at node's bounding edge, not at the node center."
 
     var deltaX = toPos.x - fromPos.x;
@@ -175,7 +177,7 @@ var selectedNodes = function() {
     return selected;
 };
 
-var pinnSelectedNodes = function() {
+var pinSelectedNodes = function() {
     selectedNodes().forEach(function(nodeId) {
         graph.getNode(nodeId).data.isPinned = true;
     });
