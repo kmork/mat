@@ -59,18 +59,37 @@ var labelNodeFinish = function () {
     positionLabel(selectedNode, selectedNode.data.label);
     save("sl", selectedNode.id + "," + selectedNode.data.label);
     selectedNode.svgImg.attr("stroke", "black");
+    graph.getNode(selectedNode.id).toggleNodeSelected();
     selectedNode = null;
     keyMode = false;
 };
 
 var addLink = function() {
     var s = selectedNodes();
+    var data = {"direction" : 0};
     if (s.length === 2) {
-        graph.addLink(s[0], s[1]);
-        save("al", s[0] + "," + s[1]);
-        graph.getNode(s[0]).toggleNodeSelected();
+        var s1 = s[0];
+        var s2 = s[1];
+        var sLink = getSelectedLink();
+        if (sLink) {
+            if (sLink.data.direction === 0) {
+                data.direction = 1;
+                var s3 = s1;
+                s1 = s2;
+                s2 = s3;
+            } else if (sLink.data.direction === 1) {
+                data.direction = 2;
+            } else if (sLink.data.direction === 2) {
+                data.direction = 0;
+            }
+            removeLink();
+        }
+        graph.addLink(s1, s2, data);
+        save("al", s1 + "," + s2 + "," + data.direction);
+
+        //graph.getNode(s[0]).toggleNodeSelected();
         graph.getNode(s[0]).data.isPinned = false;
-        graph.getNode(s[1]).toggleNodeSelected();
+        //graph.getNode(s[1]).toggleNodeSelected();
         graph.getNode(s[1]).data.isPinned = false;
     }
 };
@@ -78,14 +97,10 @@ var addLink = function() {
 var removeLink = function() {
     var s = selectedNodes();
     if (s.length === 2) {
-        // intersection of the links associated with the two nodes should yield the one
-        // we are looking for (only one link is currently allowed between two nodes).
-        graph.removeLink(graph.getLinks(s[0]).filter(function (n) {
-            return graph.getLinks(s[1]).indexOf(n) !== -1;
-        })[0]);
+        graph.removeLink(getSelectedLink());
         save("rl", s[0] + "," + s[1]);
-        graph.getNode(s[0]).toggleNodeSelected();
-        graph.getNode(s[1]).toggleNodeSelected();
+        //graph.getNode(s[0]).toggleNodeSelected();
+        //graph.getNode(s[1]).toggleNodeSelected();
     }
 };
 
@@ -95,6 +110,16 @@ var removeNode = function() {
         save("rn", nodeId);
     });
 }
+
+// intersection of the links associated with the two nodes should yield the one
+// we are looking for (only one link is currently allowed between two nodes).
+var getSelectedLink = function() {
+    var nodes = selectedNodes();
+    return graph.getLinks(nodes[0]).filter(function (n) {
+        return graph.getLinks(nodes[1]).indexOf(n) !== -1;
+    })[0];
+}
+
 
 var save = function(cmd, content) {
     var id = commands.push(cmd);

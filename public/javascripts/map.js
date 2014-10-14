@@ -6,6 +6,8 @@ var selectedNode;
 var nodeCount = 0;
 var pinnedAllNodes = false;
 var commands = [];
+var ellipseWidth = 50;
+var ellipseHeight = 25;
 
 var error = function(message) {
     $('#map').before('<div class="alert alert-error map-error"><a class="close" data-dismiss="alert">×</a><span><b>Error: </b>' + message + '</span></div>');
@@ -28,8 +30,8 @@ var graphics = Viva.Graph.View.svgGraphics();
 graphics.node(function(node) {
     var ui = Viva.Graph.svg('g').attr('id', node.id);
     node.svgImg = Viva.Graph.svg('ellipse')
-        .attr('rx', 50)
-        .attr('ry', 25)
+        .attr('rx', ellipseWidth)
+        .attr('ry', ellipseHeight)
         .attr("stroke", svgColor)
         .attr("stroke-width", 3)
         .attr("style", defaultStyle);
@@ -69,7 +71,59 @@ var displayMap = function(domElement) {
             container: document.getElementById(domElement)
         });
     renderer.run();
+
+    // Marker should be defined only once in <defs> child element of root <svg> element:
+    var defs = graphics.getSvgRoot().append('defs');
+    defs.append(markerTriangle);
+    defs.append(markerLine);
 };
+
+var createMarker = function(id) {
+    return Viva.Graph.svg('marker')
+        .attr('id', id)
+        .attr('viewBox', "0 0 10 10")
+        .attr('refX', "10")
+        .attr('refY', "5")
+        .attr('markerUnits', "strokeWidth")
+        .attr('markerWidth', "10")
+        .attr('markerHeight', "5")
+        .attr('orient', "auto");
+};
+
+var markerTriangle = createMarker('Triangle');
+markerTriangle.append('path').attr('d', 'M 0 0 L 10 5 L 0 10 z');
+var markerLine = createMarker('Line');
+markerLine.append('path').attr('d', 'M 0 0 L 10 5');
+
+graphics.link(function(link){
+    var marker = 'url(#Triangle)';
+    if (link.data.direction === 0) {
+        marker = 'url(#Line)';
+    }
+    return Viva.Graph.svg('path')
+        .attr('stroke', 'black')
+        .attr('stroke-width', 2)
+        .attr('marker-end', marker);
+}).placeLink(function(linkUI, fromPos, toPos) {
+    //  "Links should start/stop at node's bounding edge, not at the node center."
+
+    var deltaX = toPos.x - fromPos.x;
+    var deltaY = toPos.y - fromPos.y;
+    var radiansX = Math.atan2(-1 * deltaY, deltaX);
+    var radiansY = Math.atan2(-1 * deltaX, deltaY);
+    var ellipseX = ellipseWidth * Math.cos(radiansX);
+    var ellipseY = ellipseHeight * Math.cos(radiansY);
+    var toX = toPos.x - ellipseX;
+    var toY = toPos.y - ellipseY;
+    var fromX = fromPos.x + ellipseX;
+    var fromY = fromPos.y + ellipseY;
+
+    var data = 'M' + fromX + ',' + fromY +
+        'L' + toX + ',' + toY;
+
+    linkUI.attr("d", data);
+});
+
 
 // Returns an array of the selected node ids only
 var selectedNodes = function() {
@@ -121,7 +175,7 @@ var initMap = function(mapData) {
                     graph.addNode(content[0], {label:'_', description:''});
                     break;
                 case "al":
-                    graph.addLink(content[0], content[1]);
+                    graph.addLink(content[0], content[1], {direction: parseInt(content[2])});
                     break;
                 case "sl":
                     selectedNode = graph.getNode(content[0]);
