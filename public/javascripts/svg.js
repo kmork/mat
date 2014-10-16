@@ -94,7 +94,7 @@ graphics.node(function(node) {
 
 graphics.placeNode(function(nodeUI, pos) {
     nodeUI.attr('transform',
-        'translate(' + pos.x + ',' + pos.y + ')');
+        'translate(' + (pos.x - 25) + ',' + (pos.y - 12.5) + ')');
 });
 
 var addRootElements = function() {
@@ -120,28 +120,43 @@ graphics.link(function(link){
     if (link.data.direction === 0) {
         marker = 'url(#Line)';
     }
-    return Viva.Graph.svg('path')
+
+    var ui = Viva.Graph.svg('g').attr('id', link.fromId + link.toId);
+    link.startLink = Viva.Graph.svg('path')
+        .attr('stroke', 'black')
+        .attr('stroke-width', 2);
+    link.endLink = Viva.Graph.svg('path')
         .attr('stroke', 'black')
         .attr('stroke-width', 2)
-        .attr('marker-end', marker);
+        .attr('marker-start', marker);
+    ui.append(link.startLink);
+    ui.append(link.endLink);
+    return ui;
 });
 
 graphics.placeLink(function(linkUI, fromPos, toPos) {
-    //  "Links should start/stop at node's bounding edge, not at the node center."
+    //  Links may have arrow in either direction, and label (both placed in the middle)
 
-    var deltaX = toPos.x - fromPos.x;
-    var deltaY = toPos.y - fromPos.y;
-    var radiansX = Math.atan2(-1 * deltaY, deltaX);
-    var radiansY = Math.atan2(-1 * deltaX, deltaY);
-    var ellipseX = ellipseWidth * Math.cos(radiansX);
-    var ellipseY = ellipseHeight * Math.cos(radiansY);
-    var toX = toPos.x - ellipseX;
-    var toY = toPos.y - ellipseY;
-    var fromX = fromPos.x + ellipseX;
-    var fromY = fromPos.y + ellipseY;
+    var toX = toPos.x - (ellipseWidth / 2);
+    var toY = toPos.y - (ellipseHeight / 2);
+    var fromX = fromPos.x - (ellipseWidth / 2);
+    var fromY = fromPos.y - (ellipseHeight / 2);
 
-    var data = 'M' + fromX + ',' + fromY +
+    var toX2 = Math.abs(fromX - toX) / 2;
+    var toY2 = Math.abs(fromY - toY) / 2;
+
+    var midX = toX - toX2;
+    if (toX < fromX) { midX = toX + toX2};
+    var midY = toY - toY2;
+    if (toY < fromY) { midY = toY + toY2};
+
+    var startData = 'M' + fromX + ',' + fromY +
+        'L' + midX + ',' + midY;
+
+    linkUI.firstChild.attr("d", startData);
+
+    var endData = 'M' + midX + ',' + midY +
         'L' + toX + ',' + toY;
 
-    linkUI.attr("d", data);
+    linkUI.lastChild.attr("d", endData);
 });
