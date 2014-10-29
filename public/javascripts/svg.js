@@ -3,6 +3,7 @@
 var ellipseWidth = 50;
 var ellipseHeight = 25;
 var nodeTextStyle = "text-anchor: middle";
+var labelTextStyle = "text-anchor: middle";
 var svgColor = "black";
 var selectedStyle = "fill:blanchedalmond";
 var defaultStyle = "fill:white";
@@ -125,11 +126,17 @@ graphics.link(function(link){
     link.startLink = Viva.Graph.svg('path')
         .attr('stroke', 'black')
         .attr('stroke-width', 2);
+    link.svgLabel = Viva.Graph.svg('text')
+        .attr('dy', '5px')
+        .attr('style', labelTextStyle)
+        .text('');
+        //.text(link.data.label);
     link.endLink = Viva.Graph.svg('path')
         .attr('stroke', 'black')
         .attr('stroke-width', 2)
         .attr('marker-start', marker);
     ui.append(link.startLink);
+    ui.append(link.svgLabel);
     ui.append(link.endLink);
     return ui;
 });
@@ -152,11 +159,12 @@ graphics.placeLink(function(linkUI, fromPos, toPos) {
 
     var startData = 'M' + fromX + ',' + fromY +
         'L' + midX + ',' + midY;
-
     linkUI.firstChild.attr("d", startData);
+
+    linkUI.children[1].attr('x', midX);
+    linkUI.children[1].attr('y', midY);
 
     var endData = 'M' + midX + ',' + midY +
         'L' + toX + ',' + toY;
-
     linkUI.lastChild.attr("d", endData);
 });
